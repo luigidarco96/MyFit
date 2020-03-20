@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@id/nav_calories"
+        android:name="com.example.luigidarco.myfit.fragments.CaloriesFragment"
+        android:label="@string/menu_calories"
+        tools:layout="@layout/fragment_calories" >
+        <action
+            android:id="@+id/action_nav_calories_to_nav_calories_list"
+            app:destination="@id/nav_calories_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.luigidarco.myfit.fragments.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_calories_list"
+        android:name="com.example.luigidarco.myfit.fragments.CaloriesListFragment"
+        android:label="@string/menu_calories_list"
+        tools:layout="@layout/fragment_calories_list">
+
+        <argument
+            android:name="typology"
+            app:argType="string"
+            android:defaultValue=" " />
+
+    </fragment>
+
+</navigation>
