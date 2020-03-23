@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="exercise_title_array">
+        <item>Aerobics</item>
+        <item>Baseball</item>
+        <item>Basketball</item>
+        <item>Boxing</item>
+        <item>Cycling</item>
+        <item>Hockey</item>
+        <item>Running</item>
+        <item>Skating</item>
+        <item>Ski</item>
+        <item>Soccer</item>
+        <item>Swimming</item>
+        <item>Tennis</item>
+        <item>Volleyball</item>
+    </string-array>
+
+    <integer-array name="exercise_icon_array">
+        <item>@drawable/ic_workout_aerobics</item>
+        <item>@drawable/ic_workout_baseball</item>
+        <item>@drawable/ic_workout_basketball</item>
+        <item>@drawable/ic_workout_boxing</item>
+        <item>@drawable/ic_workout_cycling</item>
+        <item>@drawable/ic_workout_hockey</item>
+        <item>@drawable/ic_workout_running</item>
+        <item>@drawable/ic_workout_skating</item>
+        <item>@drawable/ic_workout_ski</item>
+        <item>@drawable/ic_workout_soccer</item>
+        <item>@drawable/ic_workout_swim</item>
+        <item>@drawable/ic_workout_tennis</item>
+        <item>@drawable/ic_workout_volleyball</item>
+    </integer-array>
+</resources>

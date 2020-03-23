@@ -6,14 +6,10 @@
     app:startDestination="@+id/nav_home">
 
     <fragment
-        android:id="@id/nav_calories"
-        android:name="com.example.luigidarco.myfit.fragments.CaloriesFragment"
+        android:id="@id/nav_calorie"
+        android:name="com.example.luigidarco.myfit.fragments.CalorieFragment"
         android:label="@string/menu_calories"
-        tools:layout="@layout/fragment_calories" >
-        <action
-            android:id="@+id/action_nav_calories_to_nav_calories_list"
-            app:destination="@id/nav_calories_list" />
-    </fragment>
+        tools:layout="@layout/fragment_calorie" />
 
     <fragment
         android:id="@+id/nav_home"
@@ -24,16 +20,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_calories_list"
-        android:name="com.example.luigidarco.myfit.fragments.CaloriesListFragment"
-        android:label="@string/menu_calories_list"
-        tools:layout="@layout/fragment_calories_list">
-
-        <argument
-            android:name="typology"
-            app:argType="string"
-            android:defaultValue=" " />
-
-    </fragment>
-
+        android:id="@+id/nav_workout"
+        android:name="com.example.luigidarco.myfit.fragments.WorkoutFragment"
+        android:label="@string/menu_workout"
+        tools:layout="@layout/fragment_workout" />
 </navigation>

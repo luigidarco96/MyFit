@@ -11,7 +11,7 @@
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_calories"
+            android:id="@+id/nav_calorie"
             android:icon="@drawable/ic_food"
             android:title="@string/menu_calories" />
         <item

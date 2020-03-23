@@ -8,11 +8,29 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog</item>
+        <item name="toolbarStyle">@style/CustomToolbarStyle</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/MyCustomTitle</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="MyCustomTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <!--Any text styling can be done here-->
+        <item name="android:textColor">@color/colorTertiary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/colorTertiary</item>
     </style>
 
     <style name="TextAppearance.MyFit.Headline1" parent="TextAppearance.MaterialComponents.Headline1">

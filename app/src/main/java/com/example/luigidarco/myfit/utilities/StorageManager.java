@@ -6,8 +6,10 @@ import android.text.TextUtils;
 
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.models.Food;
+import com.example.luigidarco.myfit.models.Workout;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,13 +24,13 @@ public class StorageManager {
     private String breakfastFood = "breakfast_food";
     private String lunchFood = "lunch_food";
     private String dinnerFood = "dinner_food";
+    private String workout = "workout";
 
     public enum FoodsList {
         BREAKFAST,
         LUNCH,
         DINNER
     }
-
 
     public StorageManager(Context context) {
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_file_name), Context.MODE_PRIVATE);
@@ -100,6 +102,41 @@ public class StorageManager {
         ArrayList<Food> foods = getFoodsList(typology);
         foods.add(food);
         setFoodsList(typology, foods);
+    }
+
+    public ArrayList<Workout> getWorkoutList() {
+        Gson gson = new Gson();
+        ArrayList<String> objString;
+        objString = getListString(workout);
+
+        ArrayList<Workout> workouts = new ArrayList<>();
+
+        for (String jString: objString) {
+            Workout workout = gson.fromJson(jString, Workout.class);
+            workouts.add(workout);
+        }
+
+        return workouts;
+    }
+
+    public void setWorkoutList(ArrayList<Workout> workouts) {
+        Gson gson = new Gson();
+        ArrayList<String> objStrings = new ArrayList<>();
+        for(Workout obj : workouts){
+            objStrings.add(gson.toJson(obj));
+        }
+        putListString(workout, objStrings);
+    }
+
+    public void addElementToWorkoutList(Workout workout) {
+        ArrayList<Workout> workouts = getWorkoutList();
+        workouts.add(workout);
+        setWorkoutList(workouts);
+    }
+
+    public void deleteWorkoutList() {
+        editor.remove(workout);
+        editor.commit();
     }
 
     private ArrayList<String> getListString(String key) {

@@ -33,44 +33,27 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher_round"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/food_name"
+            <Spinner
+                android:id="@+id/workout_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:hint="food"
-                app:startIconDrawable="@drawable/ic_user"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:entries="@array/exercise_title_array"
+                android:padding="@dimen/layout_padding"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/workout_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="60dp" />
+                    android:layout_height="wrap_content"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/food_calories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:hint="calories"
-                app:startIconDrawable="@drawable/ic_user"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:inputType="number"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
 
     </FrameLayout>
 

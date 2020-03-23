@@ -37,4 +37,13 @@ public class Food extends Object{
     public void setCalorie(int calorie) {
         this.calorie = calorie;
     }
+
+    @Override
+    public String toString() {
+        return "Food{" +
+                "image=" + image +
+                ", name='" + name + '\'' +
+                ", calorie=" + calorie +
+                '}';
+    }
 }

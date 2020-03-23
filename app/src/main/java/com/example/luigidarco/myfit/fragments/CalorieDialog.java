@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.models.Food;
+import com.example.luigidarco.myfit.utilities.CloseDialogCallback;
 import com.example.luigidarco.myfit.utilities.StorageManager;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -19,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-public class CaloriesDialog extends DialogFragment {
+public class CalorieDialog extends DialogFragment {
 
     public static final String TAG = "MYFITAPP";
 
@@ -31,7 +32,13 @@ public class CaloriesDialog extends DialogFragment {
     private TextInputLayout name;
     private TextInputLayout calorie;
 
-    public CaloriesDialog(StorageManager.FoodsList currentList) {
+    private CloseDialogCallback closeDialogCallback;
+
+    public void setCloseCallback(CloseDialogCallback callback) {
+        this.closeDialogCallback = callback;
+    }
+
+    public CalorieDialog(StorageManager.FoodsList currentList) {
         this.currentList = currentList;
     }
 
@@ -81,8 +88,8 @@ public class CaloriesDialog extends DialogFragment {
                 dismiss();
             }
         });
-        toolbar.setTitle("New");
-        toolbar.inflateMenu(R.menu.dialog_calories);
+        toolbar.setTitle("Add dish");
+        toolbar.inflateMenu(R.menu.dialog_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -92,7 +99,7 @@ public class CaloriesDialog extends DialogFragment {
                         Integer.parseInt(calorie.getEditText().getText().toString())
                 );
                 storageManager.addElementToFoodsList(currentList, food);
-                ((CaloriesListFragment) getParentFragment()).updateList();
+                closeDialogCallback.onAction(food);
                 dismiss();
                 return false;
             }

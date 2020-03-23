@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ListView
-        android:id="@+id/calories_list_view"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calories_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </ListView>
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
+        android:padding="@dimen/half_layout_padding"
+        android:clipToPadding="false" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/new_element"
@@ -20,7 +20,8 @@
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"
         android:backgroundTint="@color/colorPrimary"
-        android:tint="@android:color/white"
+        android:tint="@color/colorSecondary"
+        app:tint="@color/colorSecondary"
         android:src="@drawable/ic_plus"/>
 
 </RelativeLayout>
