@@ -13,7 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.luigidarco.myfit.utilities.StorageManager;
+import com.example.luigidarco.myfit.managers.StorageManager;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;

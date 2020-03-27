@@ -35,7 +35,6 @@
                 android:id="@+id/deviceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mi Band 3"
                 android:textSize="30dp"
                 android:textStyle="bold"
                 android:textColor="#fff"
@@ -75,6 +74,13 @@
                     android:textSize="20dp" />
 
                 <ImageView
+                    android:id="@+id/stepsReload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_steps"
@@ -88,14 +94,14 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:layout_alignParentBottom="true"
-                    android:text="134"
                     android:textSize="35dp" />
 
                 <ProgressBar
                     android:id="@+id/stepsProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
 
 
@@ -124,6 +130,13 @@
                     android:textSize="20dp" />
 
                 <ImageView
+                    android:id="@+id/heartRateReload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_heart"
@@ -144,7 +157,8 @@
                     android:id="@+id/heartRateProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
 
 
@@ -185,6 +199,13 @@
                     android:textSize="20dp" />
 
                 <ImageView
+                    android:id="@+id/metersReload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_route"
@@ -205,7 +226,8 @@
                     android:id="@+id/metersProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
 
 
@@ -234,6 +256,13 @@
                     android:textSize="20dp" />
 
                 <ImageView
+                    android:id="@+id/caloriesReload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_sync" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_fire"
@@ -254,7 +283,8 @@
                     android:id="@+id/caloriesProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
 
 

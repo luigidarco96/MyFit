@@ -1,4 +1,4 @@
-package com.example.luigidarco.myfit.utilities;
+package com.example.luigidarco.myfit.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.luigidarco.myfit.R;
+import com.example.luigidarco.myfit.callbacks.DeleteCallback;
 import com.example.luigidarco.myfit.models.Workout;
 
 import java.util.ArrayList;
@@ -19,10 +20,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
 
     private ArrayList<Workout> dataset;
     private Context mContext;
+    private DeleteCallback deleteCallback;
 
-    public WorkoutAdapter(ArrayList<Workout> data, Context context) {
+    public WorkoutAdapter(ArrayList<Workout> data, Context context, DeleteCallback deleteCallback) {
         this.dataset = data;
         this.mContext = context;
+        this.deleteCallback = deleteCallback;
     }
 
     @NonNull
@@ -38,6 +41,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         holder.image.setImageResource(workout.getImageResource());
         holder.title.setText(workout.getTitle());
         holder.time.setText(workout.getTime() + " minutes");
+        holder.trash.setTag(position);
     }
 
     @Override
@@ -49,12 +53,18 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
         ImageView image;
         TextView title;
         TextView time;
+        ImageView trash;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.workout_image);
             title = itemView.findViewById(R.id.workout_title);
             time = itemView.findViewById(R.id.workout_time);
+            trash = itemView.findViewById(R.id.workout_trash);
+
+            trash.setOnClickListener(view -> {
+                deleteCallback.onDelete(Integer.parseInt(trash.getTag().toString()));
+            });
         }
     }
 }

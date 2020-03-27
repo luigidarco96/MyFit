@@ -9,11 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.luigidarco.myfit.utilities.StorageManager;
+import com.example.luigidarco.myfit.managers.StorageManager;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -41,9 +39,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.sign_in);
 
         spManager = new StorageManager(this);
-        spManager.setUsername("luigi");
-        spManager.setAccessToken("aaaaaaaaaa");
-        spManager.setRefreshToken("vdfovnvdfbfdib");
 
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
@@ -70,30 +65,26 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         params.put("username", username.getEditText().getText().toString());
         params.put("password", password.getEditText().getText().toString());
 
-        JsonObjectRequest request = new JsonObjectRequest(url, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        JsonObjectRequest request = new JsonObjectRequest(
+                url,
+                new JSONObject(params),
+                response -> {
+                    try {
+                        JSONObject data = response.getJSONObject("data");
+                        spManager.setUsername(username.getEditText().getText().toString());
+                        spManager.setAccessToken(data.getString("access_token"));
+                        spManager.setRefreshToken(data.getString("refresh_token"));
 
-                        try {
-                            spManager.setUsername(username.getEditText().getText().toString());
-                            spManager.setAccessToken(response.getString("access_token"));
-                            spManager.setRefreshToken(response.getString("refresh_token"));
+                        Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+                        startActivity(intent);
 
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        Log.d(TAG, response.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                    Log.d(TAG, response.toString());
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, error.toString());
-                    }
+                error -> {
+                    Log.d(TAG, error.toString());
                 });
 
         queue.add(request);
@@ -101,7 +92,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     private void checkUserAlreadyLoggedIn() {
         if (spManager.getAccessToken() != "") {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
             startActivity(intent);
         }
     }

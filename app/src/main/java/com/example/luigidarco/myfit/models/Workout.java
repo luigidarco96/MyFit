@@ -1,12 +1,12 @@
 package com.example.luigidarco.myfit.models;
 
-import android.graphics.Bitmap;
-
 public class Workout {
 
     private int imageResource;
     private String title;
     private int time;
+
+    public Workout() {}
 
     public Workout(int image, String title, int time) {
         this.imageResource = image;

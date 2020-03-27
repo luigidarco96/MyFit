@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.luigidarco.myfit.utilities.StorageManager;
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.luigidarco.myfit.managers.StorageManager;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;

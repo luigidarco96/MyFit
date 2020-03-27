@@ -19,12 +19,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.luigidarco.myfit.MainActivity;
 import com.example.luigidarco.myfit.R;
+import com.example.luigidarco.myfit.managers.FitnessManager;
+import com.example.luigidarco.myfit.managers.StorageManager;
 import com.example.luigidarco.myfit.miband.ActionCallback;
 import com.example.luigidarco.myfit.miband.MiBand;
 import com.example.luigidarco.myfit.miband.listeners.HeartRateNotifyListener;
@@ -47,20 +51,22 @@ public class HomeFragment extends Fragment {
 
     private static final String TAG = "MYFITAPP";
 
-    //Change with dynamic variable
-    private String macAddress = "ED:06:99:FD:16:46";
+    private FitnessManager fitnessManager;
 
     private TextView deviceName;
     private TextView stepsCounter;
     private ProgressBar stepsProgress;
+    private ImageView stepsReload;
     private TextView metersCounter;
     private ProgressBar metersProgress;
+    private ImageView metersReload;
     private TextView caloriesCounter;
     private ProgressBar caloriesProgress;
+    private ImageView caloriesReload;
     private TextView heartRate;
     private ProgressBar heartRateProgress;
+    private ImageView heartRateReload;
 
-    private Handler mHandler;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner btScanner;
     private BluetoothDevice myDevice;
@@ -86,6 +92,10 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Fitness Manager
+        fitnessManager = new FitnessManager(getContext());
+
+        // Bind service
         Intent gattServiceIntent = new Intent(getActivity(), MiBand.class);
         getActivity().bindService(gattServiceIntent, mServiceConnection, getActivity().BIND_AUTO_CREATE);
     }
@@ -95,26 +105,36 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mHandler = new Handler();
-
         //Bluetooth Initialisation
         final BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         btScanner = bluetoothAdapter.getBluetoothLeScanner();
 
+        deviceName = root.findViewById(R.id.deviceName);
         stepsCounter = root.findViewById(R.id.stepCount);
         stepsProgress = root.findViewById(R.id.stepsProgress);
+        stepsReload = root.findViewById(R.id.stepsReload);
         metersCounter = root.findViewById(R.id.metersCount);
         metersProgress = root.findViewById(R.id.metersProgress);
+        metersReload = root.findViewById(R.id.metersReload);
         caloriesCounter = root.findViewById(R.id.caloriesCount);
         caloriesProgress = root.findViewById(R.id.caloriesProgress);
+        caloriesReload = root.findViewById(R.id.caloriesReload);
         heartRate = root.findViewById(R.id.heartRate);
         heartRateProgress = root.findViewById(R.id.heartRateProgress);
+        heartRateReload = root.findViewById(R.id.heartRateReload);
 
+        stepsReload.setOnClickListener(view -> getSteps());
+        metersReload.setOnClickListener(view -> getSteps());
+        caloriesReload.setOnClickListener(view -> getSteps());
+        heartRateReload.setOnClickListener(view -> getHeartRate());
+
+        /*
         new MaterialAlertDialogBuilder(getActivity())
                 .setTitle("Device not connected")
                 .setPositiveButton("Connect now", handleConnection)
                 .show();
+         */
 
         return root;
     }
@@ -127,15 +147,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void getInformation() {
-        // getDeviceName();
+        miBand.enableRealtimeStepsNotify();
+        getDeviceName();
         getSteps();
         getHeartRate();
-
-        //sendMessage();
-        //sendAlert();
     }
 
     private void sendAlert() {
+        /*
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -143,9 +162,12 @@ public class HomeFragment extends Fragment {
                 sendAlert();
             }
         }, 5000);
+
+         */
     }
 
     private void sendMessage() {
+        /*
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -153,31 +175,16 @@ public class HomeFragment extends Fragment {
                 sendMessage();
             }
         }, 5000);
+
+         */
     }
 
     private void getDeviceName() {
         BluetoothDevice device = miBand.getDevice();
         final String name = device.getName();
         Log.d(TAG, "Device " + name + ": " + device.toString());
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                deviceName.setText(name);
-            }
-        });
-    }
-
-    public void getBatteryInfo() {
-        miBand.getBatteryInfo(new ActionCallback() {
-            @Override
-            public void onSuccess(Object data) {
-                Log.d(TAG, "Battery info:");
-            }
-
-            @Override
-            public void onFailure(int errorCode, String msg) {
-                Log.d(TAG, "Battery fail: " + msg);
-            }
+        getActivity().runOnUiThread(() -> {
+            deviceName.setText(name);
         });
     }
 
@@ -186,45 +193,53 @@ public class HomeFragment extends Fragment {
         hideElement(metersCounter, metersProgress);
         hideElement(caloriesCounter, caloriesProgress);
 
+        hideSingle(stepsReload);
+        hideSingle(metersReload);
+        hideSingle(caloriesReload);
+
         Log.d(TAG, "Get steps");
-        miBand.setRealtimeStepsNotifyListener(new RealtimeStepsNotifyListener() {
+        miBand.setRealtimeStepsNotifyListener(steps -> {
+            fitnessManager.saveValue(FitnessManager.FitnessData.STEPS, steps[0]);
+            fitnessManager.saveValue(FitnessManager.FitnessData.METERS, steps[1]);
+            fitnessManager.saveValue(FitnessManager.FitnessData.CALORIE, steps[2]);
 
-            @Override
-            public void onNotify(final int[] steps) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        stepsCounter.setText("" + steps[0]);
-                        metersCounter.setText("" + steps[1]);
-                        caloriesCounter.setText("" + steps[2]);
-
-                        hideElement(stepsProgress, stepsCounter);
-                        hideElement(metersProgress, metersCounter);
-                        hideElement(caloriesProgress, caloriesCounter);
-                    }
-                });
-            }
+            getActivity().runOnUiThread(() -> {
+                // STEP
+                stepsCounter.setText(steps[0] + "");
+                hideElement(stepsProgress, stepsCounter);
+                showSingle(stepsReload);
+                // METER
+                metersCounter.setText(steps[1] + " m");
+                hideElement(metersProgress, metersCounter);
+                showSingle(metersReload);
+                //CALORIE
+                caloriesCounter.setText(steps[2] + " cal");
+                hideElement(caloriesProgress, caloriesCounter);
+                showSingle(caloriesReload);
+            });
         });
-        miBand.enableRealtimeStepsNotify();
     }
 
     private void getHeartRate() {
         hideElement(heartRate, heartRateProgress);
+        hideSingle(heartRateReload);
 
         Log.d(TAG, "Get HeartRate");
-        miBand.setHeartRateScanListener(new HeartRateNotifyListener() {
-            @Override
-            public void onNotify(final int heartrate) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        heartRate.setText(heartrate + " bpm");
-                        hideElement(heartRateProgress, heartRate);
-                    }
-                });
-            }
+        miBand.setHeartRateScanListener((heartrate) -> {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    heartRate.setText(heartrate + " bpm");
+                    hideElement(heartRateProgress, heartRate);
+                    showSingle(heartRateReload);
+                }
+            });
         });
         miBand.startHeartRateScan();
+        new Handler().postDelayed(() -> {
+            heartRate.setText("--");
+            hideElement(heartRateProgress, heartRate);
+        }, 20000);
     }
 
     private void hideElement(View v1, View v2) {
@@ -232,52 +247,11 @@ public class HomeFragment extends Fragment {
         v2.setVisibility(View.VISIBLE);
     }
 
-    private DialogInterface.OnClickListener handleConnection = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isScanning) {
-                        Log.d(TAG, "Force Stop Scanning");
-                        btScanner.stopScan(scanCallback);
-                        // progressDialog.cancel();
-                    }
-                }
-            }, 10000);
+    private void hideSingle(View v1) {
+        v1.setVisibility(View.GONE);
+    }
 
-            Log.d(TAG, "Start Scanning");
-            btScanner.startScan(scanCallback);
-            isScanning = true;
-            // progressDialog.show();
-        }
-    };
-
-    private ScanCallback scanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            final BluetoothDevice device = result.getDevice();
-
-            if (device.getAddress().equals(macAddress)) {
-                Log.d(TAG, "Device found");
-                btScanner.stopScan(scanCallback);
-                isScanning = false;
-                miBand.connect(device, new ActionCallback() {
-                    @Override
-                    public void onSuccess(Object data) {
-                        Log.d(TAG, "Connected");
-
-                        // Intent intent = new Intent(SyncDeviceActivity.this, MainActivity.class);
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        // startActivity(intent);
-                    }
-
-                    @Override
-                    public void onFailure(int errorCode, String msg) {
-                        Log.e(TAG, "Connection failed. Error: " + msg);
-                    }
-                });
-            }
-        }
-    };
+    private void showSingle(View v1) {
+        v1.setVisibility(View.VISIBLE);
+    }
 }

@@ -7,12 +7,15 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="header_ble_list">Choose your device</string>
     <string name="menu_home">Home</string>
     <string name="menu_calories">Daily Calories</string>
     <string name="menu_workout">Daily Workout</string>
     <string name="menu_statistics">Statistics</string>
     <string name="menu_logout">Sign out</string>
     <string name="menu_calories_list">Calories List</string>
+    <string name="title_add_new_activity">Add new activity</string>
+    <string name="title_add_new_food">Add new dish</string>
 
     <string name="login_registration">Create a new account</string>
 
@@ -25,6 +28,15 @@
     <string name="calories_tab_b">Breakfast</string>
     <string name="calories_tab_c">Lunch</string>
     <string name="calories_tab_d">Dinner</string>
+
+    <string name="new_activity_type">Activity Type</string>
+    <string name="new_activity_date">Date</string>
+    <string name="new_activity_duration">Duration</string>
+
+    <string name="new_food_image">Image</string>
+    <string name="new_food_type">Dish</string>
+    <string name="new_food_date">Date</string>
+    <string name="new_food_calorie">Calorie</string>
 
     <string name="url_server">http://192.168.43.115</string>
     <string name="tag">MYFIT</string>

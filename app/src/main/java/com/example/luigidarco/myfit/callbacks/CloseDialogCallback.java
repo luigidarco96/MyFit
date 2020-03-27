@@ -1,4 +1,4 @@
-package com.example.luigidarco.myfit.utilities;
+package com.example.luigidarco.myfit.callbacks;
 
 public interface CloseDialogCallback {
 

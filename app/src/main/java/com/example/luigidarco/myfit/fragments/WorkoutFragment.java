@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.luigidarco.myfit.R;
-import com.example.luigidarco.myfit.utilities.ViewPagerAdapter;
+import com.example.luigidarco.myfit.adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;

@@ -9,7 +9,11 @@
         android:id="@id/nav_calorie"
         android:name="com.example.luigidarco.myfit.fragments.CalorieFragment"
         android:label="@string/menu_calories"
-        tools:layout="@layout/fragment_calorie" />
+        tools:layout="@layout/fragment_calorie" >
+        <action
+            android:id="@+id/action_nav_calorie_to_add_food"
+            app:destination="@id/add_food" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_home"
@@ -23,5 +27,27 @@
         android:id="@+id/nav_workout"
         android:name="com.example.luigidarco.myfit.fragments.WorkoutFragment"
         android:label="@string/menu_workout"
-        tools:layout="@layout/fragment_workout" />
+        tools:layout="@layout/fragment_workout" >
+        <action
+            android:id="@+id/action_nav_workout_to_add_activity"
+            app:destination="@id/add_activity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_activity"
+        android:name="com.example.luigidarco.myfit.fragments.AddActivityFragment"
+        android:label="@string/title_add_new_activity"
+        tools:layout="@layout/add_new_activity"/>
+
+    <fragment
+        android:id="@+id/add_food"
+        android:name="com.example.luigidarco.myfit.fragments.AddFoodFragment"
+        android:label="@string/title_add_new_food"
+        tools:layout="@layout/add_new_food" />
+
+    <fragment
+        android:id="@+id/nav_sign_out"
+        android:name="com.example.luigidarco.myfit.fragments.SignOutFragment"
+        android:label="Signout" />
+
 </navigation>

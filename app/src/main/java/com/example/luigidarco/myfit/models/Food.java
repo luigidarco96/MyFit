@@ -1,26 +1,22 @@
 package com.example.luigidarco.myfit.models;
 
-import android.graphics.Bitmap;
+public class Food {
 
-public class Food extends Object{
-
-    private Bitmap image;
+    private String imagePath;
     private String name;
     private int calorie;
 
-    public Food(Bitmap image, String name, int calorie) {
-        this.image = image;
+    public Food() {}
+
+    public Food(String imagePath, String name, int calorie) {
+        this.imagePath = imagePath;
         this.name = name;
         this.calorie = calorie;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
+    public String getImagePath() { return imagePath; }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
+    public void setImagePath(String imagePath) {this.imagePath = imagePath; }
 
     public String getName() {
         return name;
@@ -41,7 +37,7 @@ public class Food extends Object{
     @Override
     public String toString() {
         return "Food{" +
-                "image=" + image +
+                "imagePath=" + imagePath +
                 ", name='" + name + '\'' +
                 ", calorie=" + calorie +
                 '}';
