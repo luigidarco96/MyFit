@@ -5,5 +5,5 @@
     <color name="colorTertiary">#3b3b3b</color>
     <color name="colorPrimaryDark">#d9d9d9</color>
     <color name="colorAccent">#3388FF</color>
-    <color name="colorCard">#FFF3E0</color>
+    <color name="colorCard">#FE7B7A</color> <!-- #FFF3E0 DB5461 -->
 </resources>

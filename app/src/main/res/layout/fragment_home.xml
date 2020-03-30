@@ -94,6 +94,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:layout_alignParentBottom="true"
+                    android:textColor="@color/colorTertiary"
                     android:textSize="35dp" />
 
                 <ProgressBar
@@ -150,7 +151,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:layout_alignParentBottom="true"
-                    android:text="134"
+                    android:textColor="@color/colorTertiary"
                     android:textSize="35dp" />
 
                 <ProgressBar
@@ -219,7 +220,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:layout_alignParentBottom="true"
-                    android:text="134"
+                    android:textColor="@color/colorTertiary"
                     android:textSize="35dp" />
 
                 <ProgressBar
@@ -276,7 +277,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:layout_alignParentBottom="true"
-                    android:text="134"
+                    android:textColor="@color/colorTertiary"
                     android:textSize="35dp" />
 
                 <ProgressBar

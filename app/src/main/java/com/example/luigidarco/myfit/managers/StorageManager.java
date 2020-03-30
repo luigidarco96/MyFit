@@ -48,20 +48,27 @@ public class StorageManager {
         this.mContext = context;
     }
 
-    public BluetoothDevice getDevice() {
+    public String getDevice() {
+        /*
         Gson gson = new Gson();
         String device = sharedPreferences.getString(myDevice, "");
+        Log.d(TAG, "Get device: " + device);
         if (device.equals("")) {
             return null;
         } else {
             return gson.fromJson(device, BluetoothDevice.class);
         }
+         */
+        return sharedPreferences.getString(myDevice, "");
     }
 
-    public void setDevice(BluetoothDevice bluetoothDevice) {
+    public void setDevice(String macAddress) {
+        /*Log.d(TAG, "Saved device: " + bluetoothDevice.toString());
         Gson gson = new Gson();
         String device = gson.toJson(bluetoothDevice);
-        editor.putString(myDevice, device);
+        Log.d(TAG, "Save device: " + device);
+         */
+        editor.putString(myDevice, macAddress);
         editor.commit();
     }
 

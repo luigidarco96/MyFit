@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.luigidarco.myfit.adapters.BleListAdapter;
 import com.example.luigidarco.myfit.managers.StorageManager;
@@ -52,6 +53,16 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             miBand = ((MiBand.LocalBinder) service).getService();
             Log.d(TAG, "Service connected");
+
+            String myDevice = storageManager.getDevice();
+
+            BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            BluetoothDevice mBluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(myDevice);
+
+            // Auto-reconnect
+            if (!myDevice.equals("")) {
+                handleConnection(mBluetoothDevice);
+            }
         }
 
         @Override
@@ -68,6 +79,8 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.header_ble_list);
 
+        storageManager = new StorageManager(this);
+
         // Bind Service
         Intent gattServiceIntent = new Intent(BluetoothDeviceListActivity.this, MiBand.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -80,7 +93,6 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         devices = new ArrayList<>();
 
         bleListAdapter = new BleListAdapter(devices, getApplicationContext(), itemClick -> {
-            storageManager.setDevice(itemClick);
             handleConnection(itemClick);
         });
         recyclerView.setAdapter(bleListAdapter);
@@ -91,17 +103,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         btScanner = bluetoothAdapter.getBluetoothLeScanner();
         mHandler = new Handler();
 
-        storageManager = new StorageManager(this);
-
-        BluetoothDevice myDevice = storageManager.getDevice();
-        /*if (myDevice != null) {
-            Log.d(TAG, "Device already exist");
-            handleConnection(myDevice);
-        } else {
-
-         */
-            Log.d(TAG, "Device doesn't exist");
-            startScanning();
+        startScanning();
     }
 
     private void handleConnection(BluetoothDevice device) {
@@ -113,6 +115,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
                     btScanner.stopScan(scanCallback);
                     isScanning = false;
                 }
+                storageManager.setDevice(device.getAddress());
                 Intent intent = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

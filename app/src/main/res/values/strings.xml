@@ -38,7 +38,13 @@
     <string name="new_food_date">Date</string>
     <string name="new_food_calorie">Calorie</string>
 
-    <string name="url_server">http://192.168.43.115</string>
+    <string name="workout_overview_time">Total time</string>
+    <string name="workout_overview_exercises">Number of exercises</string>
+
+    <string name="calorie_overview_total">Total calorie</string>
+    <string name="calorie_overview_average">Daily food average</string>
+
+    <string name="url_server">http://192.168.43.115:3000</string>
     <string name="tag">MYFIT</string>
     <string name="preference_file_name">myfitpreferences</string>
 

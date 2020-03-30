@@ -21,17 +21,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_clock"
+                android:src="@drawable/ic_sort_amount_up"
                 android:layout_marginBottom="@dimen/layout_padding"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/workout_overview_time"
+                android:text="@string/calorie_overview_total"
                 android:textSize="20dp"/>
 
             <TextView
-                android:id="@+id/workout_overview_time"
+                android:id="@+id/calorie_overview_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorTertiary"
@@ -44,8 +44,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="@dimen/layout_padding"
-        app:cardCornerRadius="@dimen/layout_padding">
+        app:cardCornerRadius="@dimen/layout_padding"
+        android:layout_marginTop="@dimen/layout_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,17 +57,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_dumbbell"
+                android:src="@drawable/ic_tachometer_alt"
                 android:layout_marginBottom="@dimen/layout_padding"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/workout_overview_exercises"
+                android:text="@string/calorie_overview_average"
                 android:textSize="20dp"/>
 
             <TextView
-                android:id="@+id/workout_overview_exercises"
+                android:id="@+id/calorie_overview_average"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorTertiary"

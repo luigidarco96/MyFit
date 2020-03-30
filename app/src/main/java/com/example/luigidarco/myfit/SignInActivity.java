@@ -58,7 +58,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        String url = getResources().getString(R.string.url_server) + "/login";
+        String url = getResources().getString(R.string.url_server) + "/sign-in";
         RequestQueue queue = Volley.newRequestQueue(this);
 
         Map<String, String> params = new HashMap<>();
@@ -76,6 +76,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setRefreshToken(data.getString("refresh_token"));
 
                         Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
                     } catch (JSONException e) {
