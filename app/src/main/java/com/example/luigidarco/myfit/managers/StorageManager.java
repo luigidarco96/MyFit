@@ -48,6 +48,11 @@ public class StorageManager {
         this.mContext = context;
     }
 
+    public void deleteAll() {
+        editor.clear();
+        editor.commit();
+    }
+
     public String getDevice() {
         /*
         Gson gson = new Gson();

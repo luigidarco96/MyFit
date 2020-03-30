@@ -21,8 +21,7 @@ public class SignOutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         storageManager = new StorageManager(getContext());
-        storageManager.deleteAccessToken();
-        storageManager.deleteRefreshToken();
+        storageManager.deleteAll();
 
         Intent intent = new Intent(getContext(), SignInActivity.class);
         startActivity(intent);

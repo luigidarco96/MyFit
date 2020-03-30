@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.luigidarco.myfit.adapters.BleListAdapter;
 import com.example.luigidarco.myfit.managers.StorageManager;
@@ -38,6 +37,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
 
     ArrayList<BluetoothDevice> devices;
 
+    private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner btScanner;
     private Handler mHandler;
@@ -56,11 +56,9 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
 
             String myDevice = storageManager.getDevice();
 
-            BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-            BluetoothDevice mBluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(myDevice);
-
             // Auto-reconnect
             if (!myDevice.equals("")) {
+                BluetoothDevice mBluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(myDevice);
                 handleConnection(mBluetoothDevice);
             }
         }
@@ -98,7 +96,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         recyclerView.setAdapter(bleListAdapter);
 
         // Initialise BLE
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         btScanner = bluetoothAdapter.getBluetoothLeScanner();
         mHandler = new Handler();
