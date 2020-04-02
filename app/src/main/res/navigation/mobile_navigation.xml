@@ -48,6 +48,12 @@
     <fragment
         android:id="@+id/nav_sign_out"
         android:name="com.example.luigidarco.myfit.fragments.SignOutFragment"
-        android:label="Signout" />
+        android:label="@string/menu_logout" />
+
+    <fragment
+        android:id="@+id/nav_statistics"
+        android:name="com.example.luigidarco.myfit.fragments.StatisticsFragment"
+        android:label="@string/menu_statistics"
+        tools:layout="@layout/fragment_statistics"/>
 
 </navigation>

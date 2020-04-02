@@ -21,6 +21,32 @@ public class NetworkManager {
 
     private static final String TAG = "MYFITAPP";
 
+    public static void makeGetJsonObjRequest(Context mContext, String url, NetworkCallback callback) {
+
+        StorageManager storageManager = new StorageManager(mContext);
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    callback.onSuccess(response);
+                }, error -> {
+            callback.onError(error.toString());
+        }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + storageManager.getAccessToken());
+                return headers;
+            }
+        };
+
+        queue.add(jsonObjectRequest);
+    }
+
     public static void makePostJsonObjRequest(Context mContext, String url, JSONObject jsonObject, NetworkCallback callback) {
 
         StorageManager storageManager = new StorageManager(mContext);

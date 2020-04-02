@@ -4,11 +4,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -18,33 +15,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.luigidarco.myfit.MainActivity;
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.managers.FitnessManager;
-import com.example.luigidarco.myfit.managers.StorageManager;
-import com.example.luigidarco.myfit.miband.ActionCallback;
 import com.example.luigidarco.myfit.miband.MiBand;
-import com.example.luigidarco.myfit.miband.listeners.HeartRateNotifyListener;
-import com.example.luigidarco.myfit.miband.listeners.RealtimeStepsNotifyListener;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment {
@@ -94,10 +75,6 @@ public class HomeFragment extends Fragment {
 
         // Fitness Manager
         fitnessManager = new FitnessManager(getContext());
-
-        // Bind service
-        Intent gattServiceIntent = new Intent(getActivity(), MiBand.class);
-        getActivity().bindService(gattServiceIntent, mServiceConnection, getActivity().BIND_AUTO_CREATE);
     }
 
     @Nullable
@@ -144,6 +121,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("My Fit");
+        // Bind service
+        Intent gattServiceIntent = new Intent(getActivity(), MiBand.class);
+        getActivity().bindService(gattServiceIntent, mServiceConnection, getActivity().BIND_AUTO_CREATE);
     }
 
     private void getInformation() {

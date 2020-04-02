@@ -19,13 +19,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="@dimen/layout_padding">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="Sign in to MyFit"
+            android:text="@string/sign_in_title"
             android:textSize="20dp"
             android:textAllCaps="true"/>
 
@@ -33,7 +33,7 @@
             android:id="@+id/login_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/layout_padding"
             android:hint="username"
             app:startIconDrawable="@drawable/ic_user"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -48,7 +48,7 @@
             android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/layout_padding"
             android:hint="password"
             app:startIconDrawable="@drawable/ic_key"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -60,12 +60,32 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/sign_in_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorCard"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/sign_in_error_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorSecondary"
+                android:text="Username or password wrong" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/layout_padding"
             android:backgroundTint="@color/colorPrimary"
             android:textColor="#fff"
             android:text="Sign In" />

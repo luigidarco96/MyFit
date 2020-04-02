@@ -6,9 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.luigidarco.myfit.managers.StorageManager;
@@ -31,6 +38,9 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     Button loginButton;
     TextView loginCreateAccount;
 
+    LinearLayout errorLayout;
+    TextView errorText;
+
     StorageManager spManager;
 
     @Override
@@ -43,14 +53,14 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
+        errorLayout = findViewById(R.id.sign_in_error_layout);
+        errorText = findViewById(R.id.sign_in_error_text);
+
         loginButton.setOnClickListener(this);
         loginCreateAccount = findViewById(R.id.login_create_account);
-        loginCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginCreateAccount.setOnClickListener(cview -> {
                 Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                 startActivity(intent);
-            }
         });
 
         checkUserAlreadyLoggedIn();
@@ -58,6 +68,15 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        errorLayout.setVisibility(View.GONE);
+
+        if (
+                username.getEditText().getText().toString().equals("")
+                || password.getEditText().getText().toString().equals("")
+        ) {
+            return;
+        }
+
         String url = getResources().getString(R.string.url_server) + "/sign-in";
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -76,7 +95,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setRefreshToken(data.getString("refresh_token"));
 
                         Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
 
                     } catch (JSONException e) {
@@ -85,6 +104,21 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                     Log.d(TAG, response.toString());
                 },
                 error -> {
+                    errorLayout.setVisibility(View.VISIBLE);
+                    errorText.setText(error.toString());
+
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        errorText.setText("Server unreachable");
+                    } else if (error instanceof AuthFailureError) {
+                        errorText.setText("Username or password wrong");
+                    } else if (error instanceof ServerError) {
+                        errorText.setText("Something goes wrong. Try again");
+                    } else if (error instanceof NetworkError) {
+                        errorText.setText("Check your connection");
+                    } else if (error instanceof ParseError) {
+                        errorText.setText("Something goes wrong. Try again");
+                    }
+
                     Log.d(TAG, error.toString());
                 });
 
@@ -94,6 +128,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     private void checkUserAlreadyLoggedIn() {
         if (spManager.getAccessToken() != "") {
             Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }

@@ -62,6 +62,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/sign_up_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorCard"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/layout_padding"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/sign_up_error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorSecondary"
+            android:text="Username or password wrong" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/sign_up_button"
         android:layout_width="match_parent"

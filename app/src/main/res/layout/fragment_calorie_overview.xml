@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/layout_padding">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cardCornerRadius="@dimen/layout_padding">
+        android:layout_margin="@dimen/layout_padding"
+        app:cardCornerRadius="@dimen/layout_padding"
+        app:cardElevation="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:background="@color/colorCard"
             android:orientation="vertical">
 
             <ImageView
@@ -44,14 +44,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:layout_marginLeft="@dimen/layout_padding"
         app:cardCornerRadius="@dimen/layout_padding"
-        android:layout_marginTop="@dimen/layout_padding">
+        app:cardElevation="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:background="@color/colorCard"
             android:orientation="vertical">
 
             <ImageView
