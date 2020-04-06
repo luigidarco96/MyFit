@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.callbacks.DeleteCallback;
+import com.example.luigidarco.myfit.managers.NetworkManager;
 import com.example.luigidarco.myfit.models.Food;
 
 import java.net.MalformedURLException;
@@ -41,14 +42,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food food = dataset.get(position);
-        try {
-            URL url = new URL(food.getImagePath());
 
-            Glide.with(holder.image.getContext()).load(url).into(holder.image);
+        String url = food.getImagePath();
+        NetworkManager.getImage(holder.image.getContext(), url, holder.image);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
         holder.name.setText(food.getName());
         holder.calorie.setText(food.getCalorie() + " Kcal");
         holder.trash.setTag(position);

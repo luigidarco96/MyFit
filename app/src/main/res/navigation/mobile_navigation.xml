@@ -56,4 +56,38 @@
         android:label="@string/menu_statistics"
         tools:layout="@layout/fragment_statistics"/>
 
+    <fragment
+        android:id="@+id/nav_family"
+        android:name="com.example.luigidarco.myfit.fragments.FamilyListFragment"
+        android:label="@string/menu_family"
+        tools:layout="@layout/fragment_family_list" >
+        <action
+            android:id="@+id/action_nav_family_to_nav_family_details"
+            app:destination="@id/nav_family_details" />
+        <action
+            android:id="@+id/action_nav_family_to_nav_qr_scanner"
+            app:destination="@id/nav_qr_scanner" />
+        <action
+            android:id="@+id/action_nav_family_to_nav_qr_provider"
+            app:destination="@id/nav_qr_provider" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_family_details"
+        android:name="com.example.luigidarco.myfit.fragments.FamilyMemberOverviewFragment"
+        android:label=""
+        tools:layout="@layout/fragment_family_member_overview" />
+
+    <fragment
+        android:id="@+id/nav_qr_scanner"
+        android:name="com.example.luigidarco.myfit.fragments.QRCodeScanner"
+        android:label="@string/title_qr_scanner"
+        tools:layout="@layout/qr_code_scanner" />
+
+    <fragment
+        android:id="@+id/nav_qr_provider"
+        android:name="com.example.luigidarco.myfit.fragments.QRCodeProvider"
+        android:label="@string/title_qr_provider"
+        tools:layout="@layout/qr_code_provider" />
+
 </navigation>

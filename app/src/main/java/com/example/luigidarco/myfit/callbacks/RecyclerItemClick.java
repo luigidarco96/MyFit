@@ -4,5 +4,5 @@ import android.bluetooth.BluetoothDevice;
 
 public interface RecyclerItemClick {
 
-    public void onClickItem(BluetoothDevice device);
+    void onClickItem(BluetoothDevice device);
 }

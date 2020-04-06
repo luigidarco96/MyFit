@@ -3,11 +3,15 @@ package com.example.luigidarco.myfit.managers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Base64;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 
 import org.json.JSONException;
@@ -111,5 +115,19 @@ public class NetworkManager {
         };
 
         queue.add(request);
+    }
+
+    public static void getImage(Context mContext, String url, ImageView imageView) {
+        StorageManager storageManager = new StorageManager(mContext);
+
+        GlideUrl glideUrl = new GlideUrl(url,
+                new LazyHeaders.Builder()
+                        .addHeader("Authorization", "Bearer " + storageManager.getAccessToken())
+                        .build()
+        );
+
+        Glide.with(mContext)
+                .load(glideUrl)
+                .into(imageView);
     }
 }

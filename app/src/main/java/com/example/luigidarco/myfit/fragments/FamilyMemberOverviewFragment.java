@@ -1,7 +1,6 @@
 package com.example.luigidarco.myfit.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,13 @@ import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-public class StatisticsFragment extends Fragment {
+public class FamilyMemberOverviewFragment extends Fragment {
 
-    private final String TAG = "MYFITAPP";
+    private String memberId;
+    private String memberUsername;
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy, HH:mm:ss");
 
@@ -37,30 +38,38 @@ public class StatisticsFragment extends Fragment {
     FitnessCard calorieCard;
     FitnessCard heartRateCard;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        memberId = getArguments().getString("id", "");
+        memberUsername = getArguments().getString("username", "");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        View view = inflater.inflate(R.layout.fragment_family_member_overview, container, false);
 
         stepCard = new FitnessCard(
                 "steps",
-                view.findViewById(R.id.statistics_steps),
+                view.findViewById(R.id.family_member_steps),
                 new LineGraphSeries<>()
         );
         meterCard = new FitnessCard(
                 "meters",
-                view.findViewById(R.id.statistics_meters),
+                view.findViewById(R.id.family_member_meters),
                 new LineGraphSeries<>()
         );
         calorieCard = new FitnessCard(
                 "calories",
-                view.findViewById(R.id.statistics_calories),
+                view.findViewById(R.id.family_member_calories),
                 new LineGraphSeries<>()
         );
         heartRateCard = new FitnessCard(
                 "heart-rates",
-                view.findViewById(R.id.statistics_heart_rates),
+                view.findViewById(R.id.family_member_rates),
                 new LineGraphSeries<>()
         );
 
@@ -70,6 +79,9 @@ public class StatisticsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(memberUsername + " overview");
 
         getFitnessData(stepCard);
         getFitnessData(meterCard);
@@ -94,14 +106,13 @@ public class StatisticsFragment extends Fragment {
     private void getFitnessData(FitnessCard fitnessCard) {
         String label = fitnessCard.label;
         GraphView graphView = fitnessCard.graphView;
-        graphView.getViewport().scrollToEnd();
         graphView.getGridLabelRenderer().setLabelFormatter(defaultLabelFormatter);
-        //graphView.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(5);
         LineGraphSeries lineGraphSeries = fitnessCard.lineGraphSeries;
 
         graphView.removeAllSeries();
 
-        String url = getResources().getString(R.string.url_server) + "/" + label;
+        String url = getResources().getString(R.string.url_server) + "/" + label + "/user/" + memberId;
 
         NetworkManager.makeGetJsonObjRequest(getContext(), url, new NetworkCallback() {
             @Override
@@ -110,18 +121,14 @@ public class StatisticsFragment extends Fragment {
                     JSONArray array = object.getJSONArray("data");
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject element = array.getJSONObject(i);
-
-                        Log.d(TAG, "label: " + label + " => " + element.toString());
-
                         Date date = dateFormatter.parse(element.getString("timestamp"));
                         DataPoint dataPoint = new DataPoint(
                                 date.getTime(),
                                 element.getInt("value")
                         );
-                        lineGraphSeries.appendData(dataPoint, true, 50);
+                        lineGraphSeries.appendData(dataPoint, true, 20);
                     }
                     graphView.addSeries(lineGraphSeries);
-                    graphView.getViewport().setScrollable(true);
                 } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
@@ -146,5 +153,4 @@ public class StatisticsFragment extends Fragment {
             this.lineGraphSeries = lineGraphSeries;
         }
     }
-
 }

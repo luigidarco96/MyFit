@@ -10,38 +10,26 @@
     app:cardElevation="5dp">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/layout_padding">
 
         <ImageView
-            android:id="@+id/ble_device_image"
+            android:id="@+id/family_user_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_bluetooth_b_brands" />
+            android:src="@drawable/ic_user_tie" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/family_user_username"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/ble_device_image"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/layout_padding">
-
-            <TextView
-                android:id="@+id/ble_device_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorTertiary"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/ble_device_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:layout_toRightOf="@id/family_user_image"
+            android:textColor="@color/colorTertiary"
+            android:textSize="20dp" />
 
     </RelativeLayout>
 
