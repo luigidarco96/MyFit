@@ -54,7 +54,7 @@ public class FamilyListFragment extends Fragment {
         newElement = view.findViewById(R.id.new_element);
         newElement.setOnClickListener(cview -> {
             AlertDialog dialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle("Choose option")
+                    .setTitle("Choose an option")
                     .setView(R.layout.new_family_dialog)
                     .show();
 

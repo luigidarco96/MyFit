@@ -3,10 +3,17 @@ package com.example.luigidarco.myfit.managers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -18,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,11 +42,31 @@ public class NetworkManager {
                 Request.Method.GET,
                 url,
                 null,
-                response -> {
-                    callback.onSuccess(response);
-                }, error -> {
-            callback.onError(error.toString());
-        }
+                response -> callback.onSuccess(response),
+                error -> {
+                    String message = "";
+                    if (error.networkResponse.data != null) {
+                        try {
+                            String data = new String(error.networkResponse.data, "UTF-8");
+                            Log.d(TAG, data);
+                            JSONObject obj = new JSONObject(data);
+                            message = obj.getString("message");
+                        } catch (UnsupportedEncodingException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        callback.onError("Server unreachable");
+                    } else if (error instanceof AuthFailureError) {
+                        callback.onError(message);
+                    } else if (error instanceof ServerError) {
+                        callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof NetworkError) {
+                        callback.onError("Check your connection");
+                    } else if (error instanceof ParseError) {
+                        callback.onError("Something goes wrong. Try again");
+                    }
+                }
         ) {
             @Override
             public Map<String, String> getHeaders() {
@@ -60,11 +88,31 @@ public class NetworkManager {
                 Request.Method.POST,
                 url,
                 jsonObject,
-                response -> {
-                    callback.onSuccess(response);
-                }, error -> {
-            callback.onError(error.toString());
-        }
+                response -> callback.onSuccess(response),
+                error -> {
+                    String message = "";
+                    if (error.networkResponse.data != null) {
+                        try {
+                            String data = new String(error.networkResponse.data, "UTF-8");
+                            Log.d(TAG, data);
+                            JSONObject obj = new JSONObject(data);
+                            message = obj.getString("message");
+                        } catch (UnsupportedEncodingException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        callback.onError("Server unreachable");
+                    } else if (error instanceof AuthFailureError) {
+                        callback.onError(message);
+                    } else if (error instanceof ServerError) {
+                        callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof NetworkError) {
+                        callback.onError("Check your connection");
+                    } else if (error instanceof ParseError) {
+                        callback.onError("Something goes wrong. Try again");
+                    }
+                }
         ) {
             @Override
             public Map<String, String> getHeaders() {

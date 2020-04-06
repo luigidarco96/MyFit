@@ -58,6 +58,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
 
             // Auto-reconnect
             if (!myDevice.equals("")) {
+                Log.d(TAG, "Device already exist: " + myDevice);
                 BluetoothDevice mBluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(myDevice);
                 handleConnection(mBluetoothDevice);
             }

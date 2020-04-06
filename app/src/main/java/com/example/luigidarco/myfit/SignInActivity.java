@@ -18,6 +18,8 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.luigidarco.myfit.callbacks.NetworkCallback;
+import com.example.luigidarco.myfit.managers.NetworkManager;
 import com.example.luigidarco.myfit.managers.StorageManager;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -78,18 +80,17 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         }
 
         String url = getResources().getString(R.string.url_server) + "/sign-in";
-        RequestQueue queue = Volley.newRequestQueue(this);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("username", username.getEditText().getText().toString());
-        params.put("password", password.getEditText().getText().toString());
+        JSONObject params = new JSONObject();
+        try {
+            params.put("username", username.getEditText().getText().toString());
+            params.put("password", password.getEditText().getText().toString());
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                url,
-                new JSONObject(params),
-                response -> {
+            NetworkManager.makePostJsonObjRequest(this, url, params, new NetworkCallback() {
+                @Override
+                public void onSuccess(JSONObject object) {
                     try {
-                        JSONObject data = response.getJSONObject("data");
+                        JSONObject data = object.getJSONObject("data");
                         spManager.setUsername(username.getEditText().getText().toString());
                         spManager.setAccessToken(data.getString("access_token"));
                         spManager.setRefreshToken(data.getString("refresh_token"));
@@ -101,28 +102,17 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, response.toString());
-                },
-                error -> {
+                }
+
+                @Override
+                public void onError(String error) {
                     errorLayout.setVisibility(View.VISIBLE);
-                    errorText.setText(error.toString());
-
-                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                        errorText.setText("Server unreachable");
-                    } else if (error instanceof AuthFailureError) {
-                        errorText.setText("Username or password wrong");
-                    } else if (error instanceof ServerError) {
-                        errorText.setText("Something goes wrong. Try again");
-                    } else if (error instanceof NetworkError) {
-                        errorText.setText("Check your connection");
-                    } else if (error instanceof ParseError) {
-                        errorText.setText("Something goes wrong. Try again");
-                    }
-
-                    Log.d(TAG, error.toString());
-                });
-
-        queue.add(request);
+                    errorText.setText(error);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkUserAlreadyLoggedIn() {

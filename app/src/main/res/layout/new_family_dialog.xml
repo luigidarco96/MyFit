@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_user_tie" />
+            android:src="@drawable/ic_user_friends" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_user_tie" />
+            android:src="@drawable/ic_user_plus" />
 
         <TextView
             android:layout_width="wrap_content"

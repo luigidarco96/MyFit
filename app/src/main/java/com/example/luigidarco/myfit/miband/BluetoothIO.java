@@ -28,7 +28,7 @@ public class BluetoothIO extends BluetoothGattCallback implements Serializable {
 
     public void connect(final Context context, BluetoothDevice device, final ActionCallback callback) {
         BluetoothIO.this.currentCallback = callback;
-        device.connectGatt(context, false, BluetoothIO.this);
+        device.connectGatt(context, true, BluetoothIO.this);
     }
 
     public void close() {

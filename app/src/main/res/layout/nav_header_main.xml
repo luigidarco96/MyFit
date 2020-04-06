@@ -7,29 +7,21 @@
     android:padding="@dimen/layout_padding"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/imageContainer"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_user_tie"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        app:cardCornerRadius="@dimen/half_layout_padding">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/nav_header_desc"
-            app:srcCompat="@mipmap/ic_launcher_round" />
-
-    </androidx.cardview.widget.CardView>
+        android:tint="@color/colorSecondary"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/navigation_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:layout_below="@id/imageContainer"
+        android:layout_below="@id/imageView"
         android:textAlignment="center"
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
