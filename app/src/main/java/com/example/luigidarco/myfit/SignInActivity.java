@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.managers.NetworkManager;
+import com.example.luigidarco.myfit.managers.PermissionManager;
 import com.example.luigidarco.myfit.managers.StorageManager;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -64,8 +65,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                 startActivity(intent);
         });
-
-        checkUserAlreadyLoggedIn();
     }
 
     @Override
@@ -112,6 +111,14 @@ public class SignInActivity extends Activity implements View.OnClickListener {
             });
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PermissionManager.checkLocationUsage(this) && PermissionManager.isBluetoothEnabled(this)) {
+                checkUserAlreadyLoggedIn();
         }
     }
 

@@ -12,6 +12,7 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.managers.NetworkManager;
+import com.example.luigidarco.myfit.managers.PermissionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -47,7 +48,11 @@ public class QRCodeScanner extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        codeScanner.startPreview();
+        if (!PermissionManager.checkCamera(getActivity())) {
+            PermissionManager.requestCamera(getActivity());
+        } else {
+            codeScanner.startPreview();
+        }
     }
 
     private DecodeCallback decodeCallback = result -> {

@@ -74,6 +74,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         String password = this.password.getEditText().getText().toString();
         String confirmPassword = this.confirmPassword.getEditText().getText().toString();
 
+        if (username.equals("") || password.equals("")) {
+            errorLayout.setVisibility(View.VISIBLE);
+            errorText.setText("Username and Password can't be empty");
+        }
         if (!password.equals(confirmPassword)) {
             //error
             errorLayout.setVisibility(View.VISIBLE);

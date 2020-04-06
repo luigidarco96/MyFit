@@ -45,26 +45,26 @@ public class NetworkManager {
                 response -> callback.onSuccess(response),
                 error -> {
                     String message = "";
-                    if (error.networkResponse.data != null) {
-                        try {
-                            String data = new String(error.networkResponse.data, "UTF-8");
-                            Log.d(TAG, data);
-                            JSONObject obj = new JSONObject(data);
-                            message = obj.getString("message");
-                        } catch (UnsupportedEncodingException | JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                         callback.onError("Server unreachable");
-                    } else if (error instanceof AuthFailureError) {
-                        callback.onError(message);
                     } else if (error instanceof ServerError) {
                         callback.onError("Something goes wrong. Try again");
                     } else if (error instanceof NetworkError) {
                         callback.onError("Check your connection");
                     } else if (error instanceof ParseError) {
                         callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof AuthFailureError) {
+                        if (error.networkResponse.data != null) {
+                            try {
+                                String data = new String(error.networkResponse.data, "UTF-8");
+                                Log.d(TAG, data);
+                                JSONObject obj = new JSONObject(data);
+                                message = obj.getString("message");
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onError(message);
                     }
                 }
         ) {
@@ -91,26 +91,26 @@ public class NetworkManager {
                 response -> callback.onSuccess(response),
                 error -> {
                     String message = "";
-                    if (error.networkResponse.data != null) {
-                        try {
-                            String data = new String(error.networkResponse.data, "UTF-8");
-                            Log.d(TAG, data);
-                            JSONObject obj = new JSONObject(data);
-                            message = obj.getString("message");
-                        } catch (UnsupportedEncodingException | JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                         callback.onError("Server unreachable");
-                    } else if (error instanceof AuthFailureError) {
-                        callback.onError(message);
                     } else if (error instanceof ServerError) {
                         callback.onError("Something goes wrong. Try again");
                     } else if (error instanceof NetworkError) {
                         callback.onError("Check your connection");
                     } else if (error instanceof ParseError) {
                         callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof AuthFailureError) {
+                        if (error.networkResponse.data != null) {
+                            try {
+                                String data = new String(error.networkResponse.data, "UTF-8");
+                                Log.d(TAG, data);
+                                JSONObject obj = new JSONObject(data);
+                                message = obj.getString("message");
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onError(message);
                     }
                 }
         ) {
@@ -125,7 +125,8 @@ public class NetworkManager {
         queue.add(jsonObjectRequest);
     }
 
-    public static void sendImage(Context mContext, String url, Bitmap bitmap, NetworkCallback callback) {
+    public static void sendImage(Context mContext, String url, Bitmap bitmap, NetworkCallback
+            callback) {
         StorageManager storageManager = new StorageManager(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);
 
