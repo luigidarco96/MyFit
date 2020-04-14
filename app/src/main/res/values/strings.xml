@@ -62,5 +62,5 @@
     <string name="tag">MYFIT</string>
     <string name="preference_file_name">myfitpreferences</string>
 
-    <string name="home_second">Home Second</string>
+    <string name="app_preferences">MIBAND</string> <!-- MIBAND or PYBOT -->
 </resources>

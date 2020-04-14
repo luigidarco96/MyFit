@@ -99,7 +99,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
                             spManager.setAccessToken(data.getString("access_token"));
                             spManager.setRefreshToken(data.getString("refresh_token"));
 
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();

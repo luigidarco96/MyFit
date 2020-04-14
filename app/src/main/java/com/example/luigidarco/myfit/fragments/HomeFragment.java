@@ -106,13 +106,6 @@ public class HomeFragment extends Fragment {
         caloriesReload.setOnClickListener(view -> getSteps());
         heartRateReload.setOnClickListener(view -> getHeartRate());
 
-        /*
-        new MaterialAlertDialogBuilder(getActivity())
-                .setTitle("Device not connected")
-                .setPositiveButton("Connect now", handleConnection)
-                .show();
-         */
-
         return root;
     }
 

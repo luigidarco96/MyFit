@@ -3,7 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_main">
+
+    <fragment
+        android:id="@+id/nav_main"
+        android:name="com.example.luigidarco.myfit.fragments.MainFragment"
+        android:label="MAIN" >
+        <action
+            android:id="@+id/action_nav_main_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_nav_main_to_nav_robot"
+            app:destination="@id/nav_robot"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.luigidarco.myfit.fragments.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_robot"
+        android:name="com.example.luigidarco.myfit.fragments.RobotFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_robot" />
 
     <fragment
         android:id="@id/nav_calorie"
@@ -13,14 +43,6 @@
         <action
             android:id="@+id/action_nav_calorie_to_add_food"
             app:destination="@id/add_food" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.luigidarco.myfit.fragments.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-
     </fragment>
 
     <fragment

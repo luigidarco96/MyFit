@@ -36,6 +36,8 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     final String TAG = "MYFITAPP";
 
+    private String appPreference;
+
     TextInputLayout username;
     TextInputLayout password;
     Button loginButton;
@@ -50,6 +52,8 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
+
+        appPreference = getResources().getString(R.string.app_preferences);
 
         spManager = new StorageManager(this);
 
@@ -94,9 +98,15 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setAccessToken(data.getString("access_token"));
                         spManager.setRefreshToken(data.getString("refresh_token"));
 
-                        Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        if (appPreference.equals("MIBAND")) {
+                            Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -124,9 +134,17 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     private void checkUserAlreadyLoggedIn() {
         if (spManager.getAccessToken() != "") {
-            Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+
+            if (appPreference.equals("MIBAND")) {
+                Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
         }
     }
 }
