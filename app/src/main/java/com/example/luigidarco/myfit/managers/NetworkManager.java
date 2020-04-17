@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -123,6 +124,31 @@ public class NetworkManager {
         };
 
         queue.add(jsonObjectRequest);
+    }
+
+    public static void makeDeleteRequest(Context context, String url, NetworkCallback callback) {
+        StorageManager storageManager = new StorageManager(context);
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                response -> {
+                },
+                error -> {
+                    Log.e(TAG, error.toString());
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + storageManager.getAccessToken());
+                return headers;
+            }
+        };
+
+        queue.add(request);
+
     }
 
     public static void sendImage(Context mContext, String url, Bitmap bitmap, NetworkCallback

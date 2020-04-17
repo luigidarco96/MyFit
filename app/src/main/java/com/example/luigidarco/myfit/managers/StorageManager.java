@@ -15,8 +15,11 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class StorageManager {
 
@@ -27,6 +30,7 @@ public class StorageManager {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private String lastDate = "last_date";
     private String myDevice = "my_device";
     private String username = "username";
     private String accessToken = "access_token";
@@ -46,6 +50,24 @@ public class StorageManager {
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_file_name), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         this.mContext = context;
+        checkListsValidity();
+    }
+
+    public void checkListsValidity() {
+
+        String current = getCurrentDate();
+        String old = sharedPreferences.getString(lastDate, "");
+
+        if (!current.equals(old)) {
+            //Delete lists
+            deleteFoodsList(FoodsList.BREAKFAST);
+            deleteFoodsList(FoodsList.LUNCH);
+            deleteFoodsList(FoodsList.DINNER);
+            deleteWorkoutList();
+
+            editor.putString(this.lastDate, current);
+            editor.commit();
+        }
     }
 
     public void deleteAll() {
@@ -54,25 +76,10 @@ public class StorageManager {
     }
 
     public String getDevice() {
-        /*
-        Gson gson = new Gson();
-        String device = sharedPreferences.getString(myDevice, "");
-        Log.d(TAG, "Get device: " + device);
-        if (device.equals("")) {
-            return null;
-        } else {
-            return gson.fromJson(device, BluetoothDevice.class);
-        }
-         */
         return sharedPreferences.getString(myDevice, "");
     }
 
     public void setDevice(String macAddress) {
-        /*Log.d(TAG, "Saved device: " + bluetoothDevice.toString());
-        Gson gson = new Gson();
-        String device = gson.toJson(bluetoothDevice);
-        Log.d(TAG, "Save device: " + device);
-         */
         editor.putString(myDevice, macAddress);
         editor.commit();
     }
@@ -149,35 +156,75 @@ public class StorageManager {
     }
 
     public void addElementToFoodsList(FoodsList typology, Food food) {
-        ArrayList<Food> foods = getFoodsList(typology);
-        foods.add(food);
-        setFoodsList(typology, foods);
+
+        boolean current = getCurrentDate().equals(food.getDate());
+        int pos = 0;
+
+        if (current) {
+            ArrayList<Food> foods = getFoodsList(typology);
+            foods.add(food);
+            setFoodsList(typology, foods);
+            pos = foods.size() -1;
+        }
 
         String url = mContext.getResources().getString(R.string.url_server) + "/foods";
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("name", food.getName());
-            jsonObject.put("datetime", "2020-10-10");
+            jsonObject.put("datetime", food.getDate());
             jsonObject.put("calorie", food.getCalorie());
-            jsonObject.put("image_path", food.getImagePath());
+            jsonObject.put("image_path", food.getImagePath() != null ? food.getImagePath() : "");
+
+            int finalPos = pos;
+            NetworkManager.makePostJsonObjRequest(mContext, url, jsonObject, new NetworkCallback() {
+                @Override
+                public void onSuccess(JSONObject object) {
+                    try {
+                        if (current) {
+                            int id = object.getInt("data");
+                            food.setId(id);
+                            updateElementInFoodsList(typology, finalPos, food);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, error);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        NetworkManager.makePostJsonObjRequest(mContext, url, jsonObject, new NetworkCallback() {
-            @Override
-            public void onSuccess(JSONObject object) {
-                Log.d(TAG, object.toString());
-            }
+    }
 
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, error);
-            }
-        });
+    public void updateElementInFoodsList(FoodsList typology, int pos, Food food) {
+        ArrayList<Food> foods = getFoodsList(typology);
+        foods.set(pos, food);
+        setFoodsList(typology, foods);
     }
 
     public void deleteElementFromFoodsList(FoodsList typology, int pos) {
         ArrayList<Food> foods = getFoodsList(typology);
+
+        // Delete from server
+        int id = foods.get(pos).getId();
+        String url = mContext.getResources().getString(R.string.url_server) + "/foods/" + id;
+        NetworkManager.makeDeleteRequest(mContext, url, new NetworkCallback() {
+            @Override
+            public void onSuccess(JSONObject object) {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
         foods.remove(pos);
         setFoodsList(typology, foods);
     }
@@ -216,33 +263,75 @@ public class StorageManager {
     }
 
     public void addElementToWorkoutList(Workout workout) {
-        ArrayList<Workout> workouts = getWorkoutList();
-        workouts.add(workout);
-        setWorkoutList(workouts);
+
+        boolean current = getCurrentDate().equals(workout.getDate());
+        int pos = 0;
+
+        if (current) {
+            ArrayList<Workout> workouts = getWorkoutList();
+            workouts.add(workout);
+            setWorkoutList(workouts);
+            pos = workouts.size() - 1;
+        }
+
         String url = mContext.getResources().getString(R.string.url_server) + "/activities";
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("name", workout.getTitle());
-            jsonObject.put("datetime", "2020-10-10");
+            jsonObject.put("datetime", workout.getDate());
             jsonObject.put("duration", workout.getTime());
+
+            int finalPos = pos;
+            NetworkManager.makePostJsonObjRequest(mContext, url, jsonObject, new NetworkCallback() {
+                @Override
+                public void onSuccess(JSONObject object) {
+                    try {
+                        if (current) {
+                            int id = object.getInt("data");
+                            workout.setId(id);
+                            updateElementInWorkoutList(finalPos, workout);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, error);
+                }
+            });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        NetworkManager.makePostJsonObjRequest(mContext, url, jsonObject, new NetworkCallback() {
-            @Override
-            public void onSuccess(JSONObject object) {
-                Log.d(TAG, object.toString());
-            }
+    }
 
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, error);
-            }
-        });
+    public void updateElementInWorkoutList(int pos, Workout workout) {
+        ArrayList<Workout> workouts = getWorkoutList();
+        workouts.set(pos, workout);
+        setWorkoutList(workouts);
     }
 
     public void deleteElementFromWorkoutList(int pos) {
         ArrayList<Workout> workouts = getWorkoutList();
+
+        int id = workouts.get(pos).getId();
+        String url = mContext.getResources().getString(R.string.url_server) + "/activities/" + id;
+
+        NetworkManager.makeDeleteRequest(mContext, url, new NetworkCallback() {
+            @Override
+            public void onSuccess(JSONObject object) {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+
         workouts.remove(pos);
         setWorkoutList(workouts);
     }
@@ -260,6 +349,12 @@ public class StorageManager {
         String[] myStringList = stringList.toArray(new String[stringList.size()]);
         editor.putString(key, TextUtils.join("‚‗‚", myStringList));
         editor.commit();
+    }
+
+    private String getCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

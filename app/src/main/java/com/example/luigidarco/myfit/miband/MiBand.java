@@ -22,13 +22,19 @@ import com.example.luigidarco.myfit.miband.modules.Profile;
 import com.example.luigidarco.myfit.miband.modules.Protocol;
 import com.example.luigidarco.myfit.miband.modules.StepsInfo;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Array;
 import java.util.Arrays;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 import androidx.annotation.Nullable;
 
 public class MiBand extends Service {
 
-    private static final String TAG = "MiBand";
+    private static final String TAG = "MYFITAPP";
 
     IBinder mBinder = new LocalBinder();
 
@@ -81,24 +87,41 @@ public class MiBand extends Service {
     }
 
     public void pair(final ActionCallback callback) {
-        ActionCallback ioCallback = new ActionCallback() {
-            @Override
-            public void onSuccess(Object data) {
-                BluetoothGattCharacteristic characteristic = (BluetoothGattCharacteristic) data;
-                Log.d(TAG, "Pair result " + Arrays.toString(characteristic.getValue()));
-                if (characteristic.getValue().length == 1 && characteristic.getValue()[0] == 2) {
-                    callback.onSuccess(null);
-                } else {
-                    callback.onFailure(-1, "Respone values no succ!");
-                }
-            }
 
-            @Override
-            public void onFailure(int errorCode, String msg) {
-                callback.onFailure(errorCode, msg);
+        setAuthNotifyListener(value -> {
+            if (value[0] == 0x10 && value[1] == 0x01 && value[2] == 0x01) {
+                this.io.writeCharacteristic(Profile.UUID_SERVICE_BAND_2, Profile.UUID_CHAR_AUTH, Protocol.PAIR_2, null);
+            } else if (value[0] == 0x10 && value[1] == 0x02 && value[2] == 0x01) {
+                try {
+                    byte[] tmpValue = Arrays.copyOfRange(value, 3, 19);
+                    Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+
+                    SecretKeySpec key = new SecretKeySpec(Protocol.PAIR_SECRET, "AES");
+
+                    cipher.init(Cipher.ENCRYPT_MODE, key);
+                    byte[] bytes = cipher.doFinal(tmpValue);
+
+                    byte[] rq = ArrayUtils.addAll(Protocol.PAIR_3, bytes);
+                    this.io.writeCharacteristic(Profile.UUID_SERVICE_BAND_2, Profile.UUID_CHAR_AUTH, rq, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onFailure(-1, "Handshake failed - 2 step");
+                }
+            } else if (value[0] == 0x10 && value[1] == 0x03 && value[2] == 0x01) {
+                callback.onSuccess(null);
+            } else {
+                callback.onFailure(-1, "Handshake failed");
             }
-        };
-        this.io.writeAndRead(Profile.UUID_CHAR_PAIR, Protocol.PAIR, ioCallback);
+        });
+
+        this.io.writeCharacteristic(Profile.UUID_SERVICE_BAND_2, Profile.UUID_CHAR_AUTH, Protocol.PAIR, null);
+
+    }
+
+    public void setAuthNotifyListener(final NotifyListener listener) {
+        this.io.setAuthListener(Profile.UUID_SERVICE_BAND_2, Profile.UUID_CHAR_AUTH, data -> {
+            listener.onNotify(data);
+        });
     }
 
     public BluetoothDevice getDevice() {
@@ -127,7 +150,7 @@ public class MiBand extends Service {
         };
         try {
             Thread.sleep(1000);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         this.io.readCharacteristic(Profile.UUID_CHAR_BATTERY, ioCallback);
@@ -162,7 +185,6 @@ public class MiBand extends Service {
 
             @Override
             public void onNotify(byte[] data) {
-                Log.d(TAG, "Steps: " + Arrays.toString(data));
                 int steps = StepsInfo.getSteps(data);
                 int meters = StepsInfo.getMeters(data);
                 int calories = StepsInfo.getCalories(data);
@@ -182,7 +204,6 @@ public class MiBand extends Service {
         this.io.setNotifyListener(Profile.UUID_HEART_SERVICE, Profile.UUID_HEART_CHAR, new NotifyListener() {
             @Override
             public void onNotify(byte[] data) {
-                Log.d(TAG, Arrays.toString(data));
                 if (data.length == 2) {
                     int heartRate = data[1] & 0xFF;
                     listener.onNotify(heartRate);

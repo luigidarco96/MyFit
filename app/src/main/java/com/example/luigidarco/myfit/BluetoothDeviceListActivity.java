@@ -1,5 +1,6 @@
 package com.example.luigidarco.myfit;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -14,11 +15,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.example.luigidarco.myfit.adapters.BleListAdapter;
 import com.example.luigidarco.myfit.managers.StorageManager;
 import com.example.luigidarco.myfit.miband.ActionCallback;
 import com.example.luigidarco.myfit.miband.MiBand;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
 
 import java.util.ArrayList;
 
@@ -45,6 +49,8 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BleListAdapter bleListAdapter;
 
+    private ProgressDialog progressDialog;
+
     private boolean isScanning = false;
 
     private MiBand miBand;
@@ -60,7 +66,9 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
             if (!myDevice.equals("")) {
                 Log.d(TAG, "Device already exist: " + myDevice);
                 BluetoothDevice mBluetoothDevice = bluetoothManager.getAdapter().getRemoteDevice(myDevice);
-                handleConnection(mBluetoothDevice);
+                handleConnection(mBluetoothDevice, false);
+            } else {
+                progressDialog.dismiss();
             }
         }
 
@@ -71,12 +79,24 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        miBand = null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ble_devices_list);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.header_ble_list);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         storageManager = new StorageManager(this);
 
@@ -92,7 +112,7 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         devices = new ArrayList<>();
 
         bleListAdapter = new BleListAdapter(devices, getApplicationContext(), itemClick -> {
-            handleConnection(itemClick);
+            handleConnection(itemClick, true);
         });
         recyclerView.setAdapter(bleListAdapter);
 
@@ -105,8 +125,13 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
         startScanning();
     }
 
-    private void handleConnection(BluetoothDevice device) {
+    private void handleConnection(BluetoothDevice device, boolean newDevice) {
+
         Log.d(TAG, "Connection...");
+        ProgressDialog connectionProgress = new ProgressDialog(this);
+        connectionProgress.setMessage("Connection...");
+        connectionProgress.setCancelable(false);
+        connectionProgress.show();
         miBand.connect(device, new ActionCallback() {
             @Override
             public void onSuccess(Object data) {
@@ -114,14 +139,48 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
                     btScanner.stopScan(scanCallback);
                     isScanning = false;
                 }
-                storageManager.setDevice(device.getAddress());
-                Intent intent = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                if (newDevice) {
+                    runOnUiThread(() -> {
+                        connectionProgress.setMessage("Check your device");
+                    });
+                    miBand.pair(new ActionCallback() {
+                        @Override
+                        public void onSuccess(Object data) {
+                            storageManager.setDevice(device.getAddress());
+                            Intent intent = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(int errorCode, String msg) {
+                            runOnUiThread(() -> {
+                                connectionProgress.dismiss();
+                                new MaterialAlertDialogBuilder(BluetoothDeviceListActivity.this)
+                                        .setTitle("Connection failed")
+                                        .setMessage("Please try again")
+                                        .show();
+                            });
+                            Log.d(TAG, "Error: " + msg);
+                        }
+                    });
+                } else {
+                    Intent intent = new Intent(BluetoothDeviceListActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+
             }
 
             @Override
             public void onFailure(int errorCode, String msg) {
+                runOnUiThread(() -> {
+                    connectionProgress.dismiss();
+                    new MaterialAlertDialogBuilder(BluetoothDeviceListActivity.this)
+                            .setTitle("Connection failed")
+                            .setMessage("Please try again")
+                            .show();
+                });
                 Log.d(TAG, "Error: " + msg);
             }
         });

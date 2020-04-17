@@ -6,9 +6,11 @@ public class Profile {
 
     public static final UUID UUID_SERVICE_BAND_1 = UUID.fromString("0000fee0-0000-1000-8000-00805f9b34fb");
 
+    public static final UUID UUID_SERVICE_BAND_2 = UUID.fromString("0000fee1-0000-1000-8000-00805f9b34fb");
+
     public static final UUID UUID_DESCRIPTOR_UPDATE_NOTIFICATION = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
-    public static final UUID UUID_CHAR_PAIR = UUID.fromString("0000ff0f-0000-1000-8000-00805f9b34fb");
+    public static final UUID UUID_CHAR_PAIR = UUID.fromString("0000ff0f-0000-1000-8000-00805f9b34fb"); //UUID.fromString("00000009-0000-3512-2118-0009af100700");
 
     public static final UUID UUID_CHAR_BATTERY = UUID.fromString("00000006-0000-3512-2118-0009af100700");//UUID.fromString("0000ff0c-0000-1000-8000-00805f9b34fb");
 
@@ -28,6 +30,8 @@ public class Profile {
 
     public static final UUID UUID_ALERT_SERVICE = UUID.fromString("00001802-0000-1000-8000-00805f9b34fb");
     public static final UUID UUID_ALERT_CHAR = UUID.fromString("00002a06-0000-1000-8000-00805f9b34fb");
+
+    public static final UUID UUID_CHAR_AUTH = UUID.fromString("00000009-0000-3512-2118-0009af100700");
 
     private static UUID convertFromInteger(int i) {
         final long MSB = 0x0000000000001000L;

@@ -98,7 +98,9 @@ public class AddActivityFragment extends Fragment {
         new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                int cMonth = month++;
+                int cMonth = month + 1;
+                String date = year + "-" + (cMonth < 10 ? "0" + cMonth : cMonth) + "-" + (day < 10 ? "0" + day : day);
+                workout.setDate(date);
                 dateTextView.setText(day + "/" + cMonth + "/" + year);
             }
         }, year, month, day)

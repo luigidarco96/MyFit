@@ -2,9 +2,11 @@ package com.example.luigidarco.myfit.models;
 
 public class Food {
 
+    private int id;
     private String imagePath;
     private String name;
     private int calorie;
+    private String date;
 
     public Food() {}
 
@@ -12,6 +14,14 @@ public class Food {
         this.imagePath = imagePath;
         this.name = name;
         this.calorie = calorie;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getImagePath() { return imagePath; }
@@ -34,12 +44,22 @@ public class Food {
         this.calorie = calorie;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Food{" +
-                "imagePath=" + imagePath +
+                "id=" + id +
+                ", imagePath='" + imagePath + '\'' +
                 ", name='" + name + '\'' +
                 ", calorie=" + calorie +
+                ", date='" + date + '\'' +
                 '}';
     }
 }

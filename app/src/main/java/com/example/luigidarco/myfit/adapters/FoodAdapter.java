@@ -1,6 +1,7 @@
 package com.example.luigidarco.myfit.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         Food food = dataset.get(position);
 
         String url = food.getImagePath();
-        NetworkManager.getImage(holder.image.getContext(), url, holder.image);
+        if (url != null && !url.equals("")) {
+            NetworkManager.getImage(holder.image.getContext(), url, holder.image);
+        }
 
         holder.name.setText(food.getName());
         holder.calorie.setText(food.getCalorie() + " Kcal");

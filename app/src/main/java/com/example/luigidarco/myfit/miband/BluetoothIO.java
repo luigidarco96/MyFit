@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class BluetoothIO extends BluetoothGattCallback implements Serializable {
 
-    private final String TAG = "MiBand";
+    private final String TAG = "MYFITAPP";
 
     public BluetoothGatt gatt;
     private ActionCallback currentCallback;
@@ -45,6 +45,21 @@ public class BluetoothIO extends BluetoothGattCallback implements Serializable {
             return null;
         }
         return gatt.getDevice();
+    }
+
+    public void writeAndRead(final UUID service, final UUID uuid, byte[] valueToWrite, final ActionCallback callback) {
+        ActionCallback readCallback = new ActionCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                BluetoothIO.this.readCharacteristic(service, uuid, callback);
+            }
+
+            @Override
+            public void onFailure(int errorCode, String msg) {
+                callback.onFailure(errorCode, msg);
+            }
+        };
+        this.writeCharacteristic(service, uuid, valueToWrite, readCallback);
     }
 
     public void writeAndRead(final UUID uuid, byte[] valueToWrite, final ActionCallback callback) {
@@ -136,6 +151,21 @@ public class BluetoothIO extends BluetoothGattCallback implements Serializable {
         this.notifyListeners.put(characteristic, listener);
     }
 
+    public void setAuthListener(UUID service, UUID characteristic, NotifyListener listener) {
+        BluetoothGattCharacteristic chara = gatt.getService(service).getCharacteristic(characteristic);
+        if (chara == null) {
+            Log.e(TAG, "Characterstic " + characteristic + " not found in service " + service);
+            return;
+        }
+        gatt.setCharacteristicNotification(chara, true);
+        for (BluetoothGattDescriptor descriptor: chara.getDescriptors()) {
+            if (descriptor.getUuid().equals(Profile.UUID_DESCRIPTOR_UPDATE_NOTIFICATION)) {
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                this.notifyListeners.put(characteristic, listener);
+            }
+        }
+    }
+
     @Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
         super.onConnectionStateChange(gatt, status, newState);
@@ -151,8 +181,7 @@ public class BluetoothIO extends BluetoothGattCallback implements Serializable {
 
     @Override
     public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-        //super.onCharacteristicRead(gatt, characteristic, status);
-        Log.d(TAG, "Read: " + characteristic.getUuid().toString() + " status: " + status);
+        super.onCharacteristicRead(gatt, characteristic, status);
         if (BluetoothGatt.GATT_SUCCESS == status) {
             this.onSuccess(characteristic);
         } else {
