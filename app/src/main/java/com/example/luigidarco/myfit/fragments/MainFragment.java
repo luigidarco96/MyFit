@@ -16,7 +16,7 @@ public class MainFragment extends Fragment {
 
         String property = getResources().getString(R.string.app_preferences);
 
-        if (property.equals("MIBAND")) {
+        if (property.equals("FIT")) {
             NavHostFragment.findNavController(getParentFragment()).navigate(R.id.action_nav_main_to_nav_home);
         } else {
             NavHostFragment.findNavController(getParentFragment()).navigate(R.id.action_nav_main_to_nav_robot);

@@ -22,8 +22,8 @@ public class StepsInfo {
 
     public static int getCalories(byte[] value) {
         if (value != null && value.length == 13) {
-            int meters = byteToUint16(value[9]);
-            return meters;
+            int calorie = byteToUint16(value[9]);
+            return calorie;
         }
         return -1;
     }

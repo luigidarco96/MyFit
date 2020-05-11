@@ -103,7 +103,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/layout_padding"
             android:layout_toRightOf="@id/stop_button"
-            android:text="Forward" />
+            android:text="Rightward" />
 
 
     </RelativeLayout>

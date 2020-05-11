@@ -24,6 +24,7 @@ public class SignOutFragment extends Fragment {
         storageManager.deleteAll();
 
         Intent intent = new Intent(getContext(), SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         return null;

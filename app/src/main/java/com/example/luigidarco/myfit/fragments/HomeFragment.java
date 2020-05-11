@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner btScanner;
     private BluetoothDevice myDevice;
-    private boolean isScanning = false;
+    private boolean isHeartRateSet = false;
 
     private MiBand miBand;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -202,6 +202,7 @@ public class HomeFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    isHeartRateSet = true;
                     heartRate.setText(heartrate + " bpm");
                     hideElement(heartRateProgress, heartRate);
                     showSingle(heartRateReload);
@@ -210,8 +211,11 @@ public class HomeFragment extends Fragment {
         });
         miBand.startHeartRateScan();
         new Handler().postDelayed(() -> {
-            heartRate.setText("--");
-            hideElement(heartRateProgress, heartRate);
+            if (isHeartRateSet == false) {
+                heartRate.setText("--");
+                hideElement(heartRateProgress, heartRate);
+                showSingle(heartRateReload);
+            }
         }, 20000);
     }
 

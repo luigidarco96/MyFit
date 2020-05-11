@@ -98,7 +98,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setAccessToken(data.getString("access_token"));
                         spManager.setRefreshToken(data.getString("refresh_token"));
 
-                        if (appPreference.equals("MIBAND")) {
+                        if (appPreference.equals("FIT")) {
                             Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -135,7 +135,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     private void checkUserAlreadyLoggedIn() {
         if (spManager.getAccessToken() != "") {
 
-            if (appPreference.equals("MIBAND")) {
+            if (appPreference.equals("FIT")) {
                 Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
