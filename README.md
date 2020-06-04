@@ -24,16 +24,16 @@ In this section are described all the steps required to install and deploy the M
 - Open Android Studio
 - If it is the first access choose **Open an existing Android Studio project**.
 
-![Open Project](figures/load_project.png?raw=true "Open Project")
+<img width="200px" alt="Open Project" src="figures/load_project.png">
 
 - Otherwise go in the menu bar and select **File** > **Open**.
 
-![Open Project](figures/load_project_1.png?raw=true "Open Project")
+<img width="200px" alt="Open Project" src="figures/load_project_1.png">
 
 - Navigate till the code directory and press **Open**
 - Go in the menu bar and select **Build** > **Make Project**, in order to download all the dependency located in the grandle file.
 
-![Open Project](figures/make_project.png?raw=true "Make Project")
+<img width="200px" alt="Make Project" src="figures/make_project.png">
 
 ### Step 3 - Configuration
 
