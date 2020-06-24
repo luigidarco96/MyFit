@@ -57,9 +57,7 @@
     <string name="new_family_add_new">Add a new member to your family</string>
     <string name="new_family_be_part">Be part of a family</string>
 
-    <string name="url_server">http://192.168.43.115:3000</string> <!-- http://ec2-18-130-176-120.eu-west-2.compute.amazonaws.com -->
+    <string name="url_server">http://ec2-18-130-176-120.eu-west-2.compute.amazonaws.com</string>
     <string name="tag">MYFIT</string>
     <string name="preference_file_name">myfitpreferences</string>
-
-    <string name="app_preferences">FIT</string> <!-- FIT or ROBOT -->
 </resources>

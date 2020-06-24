@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.addisonelliott.segmentedbutton.SegmentedButtonGroup;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -38,13 +39,15 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     private String appPreference;
 
-    TextInputLayout username;
-    TextInputLayout password;
-    Button loginButton;
-    TextView loginCreateAccount;
+    private TextInputLayout username;
+    private TextInputLayout password;
+    private Button loginButton;
+    private TextView loginCreateAccount;
 
-    LinearLayout errorLayout;
-    TextView errorText;
+    private LinearLayout errorLayout;
+    private TextView errorText;
+
+    private SegmentedButtonGroup segmentedButtonGroup;
 
     StorageManager spManager;
 
@@ -53,15 +56,18 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
 
-        appPreference = getResources().getString(R.string.app_preferences);
-
         spManager = new StorageManager(this);
+
+        appPreference = spManager.getAppPreference();
+
+        Log.d(TAG, "App preference ---------> " + appPreference);
 
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
         errorLayout = findViewById(R.id.sign_in_error_layout);
         errorText = findViewById(R.id.sign_in_error_text);
+        segmentedButtonGroup = findViewById(R.id.sign_in_app_preference);
 
         loginButton.setOnClickListener(this);
         loginCreateAccount = findViewById(R.id.login_create_account);
@@ -82,6 +88,10 @@ public class SignInActivity extends Activity implements View.OnClickListener {
             return;
         }
 
+        int pref = segmentedButtonGroup.getPosition();
+        Log.d(TAG, "pos: " + pref);
+        appPreference = pref == 0 ? StorageManager.AppPreference.FIT.label : StorageManager.AppPreference.ROBOT.label;
+        Log.d(TAG, "App preference chosen -----> " + appPreference);
         String url = getResources().getString(R.string.url_server) + "/sign-in";
 
         JSONObject params = new JSONObject();
@@ -97,6 +107,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setUsername(username.getEditText().getText().toString());
                         spManager.setAccessToken(data.getString("access_token"));
                         spManager.setRefreshToken(data.getString("refresh_token"));
+                        spManager.setAppPreference(pref == 0 ? StorageManager.AppPreference.FIT : StorageManager.AppPreference.ROBOT);
 
                         if (appPreference.equals("FIT")) {
                             Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);

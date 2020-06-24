@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <!--
     <ImageView
@@ -24,19 +24,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:text="@string/sign_in_title"
-            android:textSize="20dp"
-            android:textAllCaps="true"/>
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="20dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_username"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_padding"
             android:hint="username"
-            app:startIconDrawable="@drawable/ic_user"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -46,17 +46,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/layout_padding"
             android:hint="password"
-            app:startIconDrawable="@drawable/ic_key"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:startIconDrawable="@drawable/ic_key">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,10 +64,10 @@
             android:id="@+id/sign_in_error_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorCard"
-            android:orientation="vertical"
-            android:gravity="center"
             android:layout_marginTop="@dimen/layout_padding"
+            android:background="@color/colorCard"
+            android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
@@ -75,8 +75,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/colorSecondary"
-                android:text="Username or password wrong" />
+                android:text="Username or password wrong"
+                android:textColor="@color/colorSecondary" />
 
         </LinearLayout>
 
@@ -87,21 +87,49 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/layout_padding"
             android:backgroundTint="@color/colorPrimary"
-            android:textColor="#fff"
-            android:text="Sign In" />
+            android:text="Sign In"
+            android:textColor="#fff" />
+
+        <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
+            android:id="@+id/sign_in_app_preference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
+            android:elevation="1dp"
+            app:position="0"
+            app:selectedBackground="@color/colorPrimary">
+
+            <com.addisonelliott.segmentedbutton.SegmentedButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/layout_padding"
+                app:selectedTextColor="@color/colorSecondary"
+                app:text="fit version" />
+
+            <com.addisonelliott.segmentedbutton.SegmentedButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/layout_padding"
+                app:selectedTextColor="@color/colorSecondary"
+                app:text="robot version" />
+
+        </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
 
     </LinearLayout>
-    
+
     <TextView
         android:id="@+id/login_create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
         android:text="@string/login_registration"
         android:textAllCaps="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/colorPrimary"
-        android:layout_margin="20dp" />
+        android:textColor="@color/colorPrimary" />
 
 
 </RelativeLayout>

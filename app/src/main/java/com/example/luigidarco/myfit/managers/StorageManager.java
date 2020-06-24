@@ -30,6 +30,7 @@ public class StorageManager {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private String appPreference = "app_preference";
     private String lastDate = "last_date";
     private String myDevice = "my_device";
     private String username = "username";
@@ -46,11 +47,31 @@ public class StorageManager {
         DINNER
     }
 
+    public enum AppPreference {
+        FIT("FIT"),
+        ROBOT("ROBOT");
+
+        public String label;
+
+        private AppPreference(String label) {
+            this.label = label;
+        }
+    }
+
     public StorageManager(Context context) {
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_file_name), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         this.mContext = context;
         checkListsValidity();
+    }
+
+    public void setAppPreference(AppPreference pref) {
+        editor.putString(appPreference, pref.label);
+        editor.commit();
+    }
+
+    public String getAppPreference() {
+        return sharedPreferences.getString(appPreference, "");
     }
 
     public void checkListsValidity() {
