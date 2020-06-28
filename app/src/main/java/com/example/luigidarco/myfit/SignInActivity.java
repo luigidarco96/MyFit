@@ -23,6 +23,7 @@ import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.managers.NetworkManager;
 import com.example.luigidarco.myfit.managers.PermissionManager;
 import com.example.luigidarco.myfit.managers.StorageManager;
+import com.example.luigidarco.myfit.models.User;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -60,8 +61,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
         appPreference = spManager.getAppPreference();
 
-        Log.d(TAG, "App preference ---------> " + appPreference);
-
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
@@ -89,9 +88,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         }
 
         int pref = segmentedButtonGroup.getPosition();
-        Log.d(TAG, "pos: " + pref);
         appPreference = pref == 0 ? StorageManager.AppPreference.FIT.label : StorageManager.AppPreference.ROBOT.label;
-        Log.d(TAG, "App preference chosen -----> " + appPreference);
         String url = getResources().getString(R.string.url_server) + "/sign-in";
 
         JSONObject params = new JSONObject();
@@ -109,15 +106,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                         spManager.setRefreshToken(data.getString("refresh_token"));
                         spManager.setAppPreference(pref == 0 ? StorageManager.AppPreference.FIT : StorageManager.AppPreference.ROBOT);
 
-                        if (appPreference.equals("FIT")) {
-                            Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        }
+                        checkNewUser();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -145,17 +134,55 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     private void checkUserAlreadyLoggedIn() {
         if (spManager.getAccessToken() != "") {
+            checkNewUser();
+        }
+    }
 
-            if (appPreference.equals("FIT")) {
-                Intent intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+    private void checkNewUser() {
+        String url = getResources().getString(R.string.url_server) + "/users";
+
+        NetworkManager.makeGetJsonObjRequest(this, url, new NetworkCallback() {
+            @Override
+            public void onSuccess(JSONObject object) {
+                try {
+                    JSONObject data = object.getJSONObject("data");
+                    User currentUser = new User(
+                            data.getInt("id"),
+                            data.getString("username"),
+                            data.getString("full_name"),
+                            data.getInt("weight"),
+                            data.getInt("height"),
+                            data.getString("date_of_birth"),
+                            data.getInt("gender")
+                    );
+                    spManager.setCurrentUser(currentUser);
+                    if (currentUser.isNew()) {
+                        Intent intent = new Intent(getApplicationContext(), AddPersonalInformationActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    } else {
+                        startSession();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Error" + error);
+            }
+        });
+    }
+
+    private void startSession() {
+        Intent intent;
+        if (appPreference.equals("FIT")) {
+            intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
         }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

@@ -17,6 +17,7 @@
     <string name="menu_logout">Sign out</string>
     <string name="menu_calories_list">Calories List</string>
     <string name="menu_family">Family</string>
+    <string name="menu_profile">Manage Profile</string>
     <string name="title_add_new_activity">Add new activity</string>
     <string name="title_add_new_food">Add new dish</string>
     <string name="title_qr_scanner">Scan QR Code</string>

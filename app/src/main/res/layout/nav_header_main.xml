@@ -8,12 +8,11 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/user_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_user_tie"
         android:layout_centerHorizontal="true"
-        android:tint="@color/colorSecondary"
+        android:src="@drawable/ic_male"
         android:layout_centerVertical="true" />
 
     <TextView
@@ -21,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:layout_below="@id/imageView"
+        android:layout_below="@id/user_image"
         android:textAlignment="center"
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.models.Food;
+import com.example.luigidarco.myfit.models.User;
 import com.example.luigidarco.myfit.models.Workout;
 import com.google.gson.Gson;
 
@@ -33,6 +34,7 @@ public class StorageManager {
     private String appPreference = "app_preference";
     private String lastDate = "last_date";
     private String myDevice = "my_device";
+    private String user = "current_user";
     private String username = "username";
     private String accessToken = "access_token";
     private String refreshToken = "refresh_token";
@@ -72,6 +74,20 @@ public class StorageManager {
 
     public String getAppPreference() {
         return sharedPreferences.getString(appPreference, "");
+    }
+
+    public void setCurrentUser(User user) {
+        Gson gson = new Gson();
+        String strUser = gson.toJson(user);
+        editor.putString(this.user, strUser);
+        editor.commit();
+    }
+
+    public User getCurrentUser() {
+        Gson gson = new Gson();
+        String strUser = sharedPreferences.getString(this.user, "");
+        User user = gson.fromJson(strUser, User.class);
+        return user;
     }
 
     public void checkListsValidity() {

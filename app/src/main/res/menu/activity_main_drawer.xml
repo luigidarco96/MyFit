@@ -32,6 +32,15 @@
         android:id="@+id/menu_group_2"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/menu_profile" />
+    </group>
+
+    <group
+        android:id="@+id/menu_group_3"
+        android:checkableBehavior="single">
+        <item
             android:id="@+id/nav_sign_out"
             android:icon="@drawable/ic_sign_out"
             android:title="@string/menu_logout" />

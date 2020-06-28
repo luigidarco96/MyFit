@@ -4,18 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:orientation="vertical"
+        android:layout_centerVertical="true"
         android:padding="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You are new here!"
+            android:text="Please,"
             android:textColor="@color/colorTertiary"
             android:textSize="30dp"
             android:textStyle="bold" />
@@ -23,18 +22,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create a new account"
+            android:text="Insert your information"
             android:textColor="@color/colorTertiary"
             android:textSize="30dp"
             android:textStyle="bold"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_username"
+            android:id="@+id/user_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="username"
+            android:hint="full name"
             app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -44,39 +43,84 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_password"
+            android:id="@+id/user_weight"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="password"
-            app:startIconDrawable="@drawable/ic_key">
+            android:layout_marginTop="@dimen/layout_padding"
+            android:hint="weight"
+            app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:inputType="textPassword" />
+                android:digits="0123456789"
+                android:inputType="phone"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_confirm_password"
+            android:id="@+id/user_height"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="confirm password"
-            app:startIconDrawable="@drawable/ic_key">
+            android:layout_marginTop="@dimen/layout_padding"
+            android:hint="height"
+            app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:inputType="textPassword" />
+                android:digits="0123456789"
+                android:inputType="phone"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
+            android:id="@+id/user_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:elevation="1dp"
+            app:position="0"
+            app:selectedBackground="@color/colorPrimary">
+
+            <com.addisonelliott.segmentedbutton.SegmentedButton
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:padding="@dimen/layout_padding"
+                app:selectedTextColor="@color/colorSecondary"
+                app:text="male" />
+
+            <com.addisonelliott.segmentedbutton.SegmentedButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/layout_padding"
+                app:selectedTextColor="@color/colorSecondary"
+                app:text="female" />
+
+        </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/user_date_of_birth"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:hint="date of birth"
+            app:startIconDrawable="@drawable/ic_user">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:id="@+id/sign_up_error_layout"
+            android:id="@+id/user_error"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="@dimen/layout_padding"
@@ -86,7 +130,7 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/sign_up_error_text"
+                android:id="@+id/user_error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -96,13 +140,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/sign_up_button"
+            android:id="@+id/user_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/layout_padding"
             android:backgroundTint="@color/colorPrimary"
-            android:text="Sign Up"
+            android:text="Continue"
             android:textColor="#fff" />
 
     </LinearLayout>

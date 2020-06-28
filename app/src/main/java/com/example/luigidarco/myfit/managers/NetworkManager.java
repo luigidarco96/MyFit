@@ -126,6 +126,52 @@ public class NetworkManager {
         queue.add(jsonObjectRequest);
     }
 
+    public static void makePutJsonObjRequest(Context mContext, String url, JSONObject jsonObject, NetworkCallback callback) {
+
+        StorageManager storageManager = new StorageManager(mContext);
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                jsonObject,
+                response -> callback.onSuccess(response),
+                error -> {
+                    String message = "";
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        callback.onError("Server unreachable");
+                    } else if (error instanceof ServerError) {
+                        callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof NetworkError) {
+                        callback.onError("Check your connection");
+                    } else if (error instanceof ParseError) {
+                        callback.onError("Something goes wrong. Try again");
+                    } else if (error instanceof AuthFailureError) {
+                        if (error.networkResponse.data != null) {
+                            try {
+                                String data = new String(error.networkResponse.data, "UTF-8");
+                                Log.d(TAG, data);
+                                JSONObject obj = new JSONObject(data);
+                                message = obj.getString("message");
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onError(message);
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + storageManager.getAccessToken());
+                return headers;
+            }
+        };
+
+        queue.add(jsonObjectRequest);
+    }
+
     public static void makeDeleteRequest(Context context, String url, NetworkCallback callback) {
         StorageManager storageManager = new StorageManager(context);
         RequestQueue queue = Volley.newRequestQueue(context);
