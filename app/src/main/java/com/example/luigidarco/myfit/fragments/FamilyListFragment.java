@@ -114,8 +114,6 @@ public class FamilyListFragment extends Fragment {
                                 obj.getInt("id"),
                                 obj.getString("username"),
                                 obj.getString("full_name"),
-                                obj.getInt("weight"),
-                                obj.getInt("height"),
                                 obj.getString("date_of_birth"),
                                 obj.getInt("gender")
                         );

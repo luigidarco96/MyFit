@@ -1,24 +1,29 @@
 package com.example.luigidarco.myfit.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class User {
 
     private int id;
     private String username;
     private String fullName;
-    private int weight;
-    private int height;
-    private String dateBirth;
+    private Date dateBirth;
     private int gender;
+    private final static SimpleDateFormat dataFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
     public User() {}
 
-    public User(int id, String username, String fullName, int weight, int height, String dateBirth, int gender) {
+    public User(int id, String username, String fullName, String dateBirth, int gender) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
-        this.weight = weight;
-        this.height = height;
-        this.dateBirth = dateBirth;
+        try {
+            this.dateBirth = dataFormatter.parse(dateBirth);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         this.gender = gender;
     }
 
@@ -54,28 +59,20 @@ public class User {
         this.fullName = fullName;
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public String getDateBirth() {
-        return dateBirth;
+        return dataFormatter.format(dateBirth);
+    }
+
+    public String getDateBirthSQL() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dateBirth);
     }
 
     public void setDateBirth(String dateBirth) {
-        this.dateBirth = dateBirth;
+        try {
+            this.dateBirth = dataFormatter.parse(dateBirth);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getGender() {
@@ -92,8 +89,6 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", weight=" + weight +
-                ", height=" + height +
                 ", dateBirth='" + dateBirth + '\'' +
                 ", gender=" + gender +
                 '}';

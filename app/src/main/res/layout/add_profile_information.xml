@@ -28,21 +28,6 @@
             android:textStyle="bold"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:hint="full name"
-            app:startIconDrawable="@drawable/ic_user">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_weight"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -73,49 +58,6 @@
                 android:layout_height="60dp"
                 android:digits="0123456789"
                 android:inputType="phone"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
-            android:id="@+id/user_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/layout_padding"
-            android:elevation="1dp"
-            app:position="0"
-            app:selectedBackground="@color/colorPrimary">
-
-            <com.addisonelliott.segmentedbutton.SegmentedButton
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:padding="@dimen/layout_padding"
-                app:selectedTextColor="@color/colorSecondary"
-                app:text="male" />
-
-            <com.addisonelliott.segmentedbutton.SegmentedButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/layout_padding"
-                app:selectedTextColor="@color/colorSecondary"
-                app:text="female" />
-
-        </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_date_of_birth"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_padding"
-            android:hint="date of birth"
-            app:startIconDrawable="@drawable/ic_user">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

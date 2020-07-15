@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.example.luigidarco.myfit.adapters.BleListAdapter;
+import com.example.luigidarco.myfit.managers.PermissionManager;
 import com.example.luigidarco.myfit.managers.StorageManager;
 import com.example.luigidarco.myfit.miband.ActionCallback;
 import com.example.luigidarco.myfit.miband.MiBand;
@@ -79,6 +80,24 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (PermissionManager.checkLocationUsage(this) && PermissionManager.isBluetoothEnabled(this)) {
+            //Start service
+            Intent gattServiceIntent = new Intent(BluetoothDeviceListActivity.this, MiBand.class);
+            bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+            // Initialise BLE
+            bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            bluetoothAdapter = bluetoothManager.getAdapter();
+            btScanner = bluetoothAdapter.getBluetoothLeScanner();
+            mHandler = new Handler();
+
+            startScanning();
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -100,10 +119,6 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
 
         storageManager = new StorageManager(this);
 
-        // Bind Service
-        Intent gattServiceIntent = new Intent(BluetoothDeviceListActivity.this, MiBand.class);
-        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
         recyclerView = findViewById(R.id.ble_list);
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -115,14 +130,6 @@ public class BluetoothDeviceListActivity extends AppCompatActivity {
             handleConnection(itemClick, true);
         });
         recyclerView.setAdapter(bleListAdapter);
-
-        // Initialise BLE
-        bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-        btScanner = bluetoothAdapter.getBluetoothLeScanner();
-        mHandler = new Handler();
-
-        startScanning();
     }
 
     private void handleConnection(BluetoothDevice device, boolean newDevice) {

@@ -1,5 +1,6 @@
 package com.example.luigidarco.myfit.callbacks;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public interface NetworkCallback {

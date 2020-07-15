@@ -24,17 +24,14 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
 
     private String TAG = "MYFITAPP";
 
-    StorageManager spManager;
-    String appPreference;
+    private StorageManager spManager;
+    private String appPreference;
 
-    TextInputLayout fullName;
-    TextInputLayout weight;
-    TextInputLayout height;
-    TextInputLayout dateOfBirth;
-    Button continueButton;
-    private SegmentedButtonGroup gender;
-    LinearLayout errorLayout;
-    TextView errorText;
+    private TextInputLayout weight;
+    private TextInputLayout height;
+    private Button continueButton;
+    private LinearLayout errorLayout;
+    private TextView errorText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,56 +41,59 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
         spManager = new StorageManager(this);
         appPreference = spManager.getAppPreference();
 
-        fullName = findViewById(R.id.user_name);
         weight = findViewById(R.id.user_weight);
         height = findViewById(R.id.user_height);
-        dateOfBirth = findViewById(R.id.user_date_of_birth);
         continueButton = findViewById(R.id.user_button);
-        gender = findViewById(R.id.user_gender);
         errorLayout = findViewById(R.id.user_error);
         errorText = findViewById(R.id.user_error_text);
 
         continueButton.setOnClickListener(onClickContinue);
     }
 
+    private boolean checkEmpty(int weight, int height) {
+        if (weight < 1) {
+            showError("Weight required greater than 1");
+            return false;
+        }
+        if (height < 1) {
+            showError("Height required greater than 1");
+            return false;
+        }
+        return true;
+    }
+
     private View.OnClickListener onClickContinue = view -> {
         hideError();
 
-        String fullName = this.fullName.getEditText().getText().toString();
         int weight = Integer.parseInt(this.weight.getEditText().getText().toString());
         int height = Integer.parseInt(this.height.getEditText().getText().toString());
-        String date = this.dateOfBirth.getEditText().getText().toString();
-        int gender = this.gender.getPosition();
 
-        if (fullName.equals("")) {
-            showError("Missing fields");
-        } else {
-            JSONObject params = new JSONObject();
-            try {
-                params.put("full_name", fullName);
-                params.put("weight", weight);
-                params.put("height", height);
-                params.put("date_of_birth", date);
-                params.put("gender", gender);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (!checkEmpty(weight, height)) {
+            return;
+        }
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("weight", weight);
+            params.put("height", height);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, params.toString());
+        String url = getResources().getString(R.string.url_server) + "/personal-info";
+        NetworkManager.makePostJsonObjRequest(this, url, params, new NetworkCallback() {
+            @Override
+            public void onSuccess(JSONObject object) {
+                startSession();
             }
 
-            Log.d(TAG, params.toString());
-            String url = getResources().getString(R.string.url_server) + "/users";
-            NetworkManager.makePutJsonObjRequest(this, url, params, new NetworkCallback() {
-                @Override
-                public void onSuccess(JSONObject object) {
-                    startSession();
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.e(TAG, "Error: " + error);
-                    showError("Something went wrong!");
-                }
-            });
-        }
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Error: " + error);
+                showError("Something went wrong!");
+            }
+        });
     };
 
     private void showError(String msg) {

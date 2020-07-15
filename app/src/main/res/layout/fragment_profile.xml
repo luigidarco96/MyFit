@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/layout_padding">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".fragments.HomeFragment">
 
@@ -217,6 +223,7 @@
         android:layout_marginTop="@dimen/layout_padding"
         android:layout_marginLeft="@dimen/layout_padding"
         android:layout_marginRight="@dimen/layout_padding"
+        android:layout_marginBottom="@dimen/layout_padding"
         app:cardCornerRadius="@dimen/layout_padding">
 
         <RelativeLayout
@@ -252,3 +259,5 @@
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
+
+</ScrollView>
