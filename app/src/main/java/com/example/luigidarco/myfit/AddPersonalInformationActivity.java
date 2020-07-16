@@ -50,7 +50,7 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
         continueButton.setOnClickListener(onClickContinue);
     }
 
-    private boolean checkEmpty(int weight, int height) {
+    private boolean checkEmpty(double weight, double height) {
         if (weight < 1) {
             showError("Weight required greater than 1");
             return false;
@@ -65,8 +65,8 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
     private View.OnClickListener onClickContinue = view -> {
         hideError();
 
-        int weight = Integer.parseInt(this.weight.getEditText().getText().toString());
-        int height = Integer.parseInt(this.height.getEditText().getText().toString());
+        double weight = Double.parseDouble(this.weight.getEditText().getText().toString());
+        double height = Double.parseDouble(this.height.getEditText().getText().toString());
 
         if (!checkEmpty(weight, height)) {
             return;

@@ -1,6 +1,7 @@
 package com.example.luigidarco.myfit;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,20 +39,20 @@ import androidx.annotation.Nullable;
 
 public class SignUpActivity extends Activity {
 
-    String TAG = "MYFITAPP";
+    private String TAG = "MYFITAPP";
 
-    TextInputLayout username;
-    TextInputLayout password;
-    TextInputLayout confirmPassword;
-    TextInputLayout fullName;
-    TextInputLayout dateBirth;
-    SegmentedButtonGroup gender;
-    Button signUpButton;
+    private TextInputLayout username;
+    private TextInputLayout password;
+    private TextInputLayout confirmPassword;
+    private TextInputLayout fullName;
+    private TextInputLayout dateBirth;
+    private SegmentedButtonGroup gender;
+    private Button signUpButton;
 
-    LinearLayout errorLayout;
-    TextView errorText;
+    private LinearLayout errorLayout;
+    private TextView errorText;
 
-    StorageManager spManager;
+    private String birthDate = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,15 +65,13 @@ public class SignUpActivity extends Activity {
         fullName = findViewById(R.id.sign_up_full_name);
         dateBirth = findViewById(R.id.sign_up_date_of_birth);
         gender = findViewById(R.id.sing_up_gender);
-
         signUpButton = findViewById(R.id.sign_up_button);
-
         errorLayout = findViewById(R.id.sign_up_error_layout);
         errorText = findViewById(R.id.sign_up_error_text);
 
+        dateBirth.getEditText().setFocusable(false);
+        dateBirth.getEditText().setOnClickListener(onClickBirth);
         signUpButton.setOnClickListener(signUpButtonListener);
-
-        spManager = new StorageManager(this);
     }
 
     private boolean checkEmptyField(String username, String password, String confirmPassword, String fullName, String dateBirth) {
@@ -107,6 +107,21 @@ public class SignUpActivity extends Activity {
         errorText.setText(msg);
     }
 
+    private View.OnClickListener onClickBirth = view -> {
+        Log.d(TAG, "SHOW");
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH);
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        new DatePickerDialog(this, (datePicker, year1, month1, day1) -> {
+            int cMonth = month1 + 1;
+            String date =  (day1 < 10 ? "0" + day1 : day1) + "/" + (cMonth < 10 ? "0" + cMonth : cMonth) + "/" + year1;
+            String dateSQL = year1 + "-" + (cMonth < 10 ? "0" + cMonth : cMonth) + "-" + (day1 < 10 ? "0" + day1 : day1);
+            birthDate = dateSQL;
+            dateBirth.getEditText().setText(date);
+        }, year, month, day)
+                .show();
+    };
+
     private View.OnClickListener signUpButtonListener = (view) -> {
         hideError();
 
@@ -114,7 +129,7 @@ public class SignUpActivity extends Activity {
         String password = this.password.getEditText().getText().toString();
         String confirmPassword = this.confirmPassword.getEditText().getText().toString();
         String fullName = this.fullName.getEditText().getText().toString();
-        String dateOfBirth = this.dateBirth.getEditText().getText().toString();
+        String dateOfBirth = this.birthDate;
         int gender = this.gender.getPosition();
 
         if (!checkEmptyField(username, password, confirmPassword, fullName, dateOfBirth)) {

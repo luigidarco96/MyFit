@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.managers.NetworkManager;
+import com.example.luigidarco.myfit.managers.StorageManager;
 import com.example.luigidarco.myfit.models.PersonalInfo;
 import com.example.luigidarco.myfit.models.User;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -69,6 +70,8 @@ public class ProfileFragment extends Fragment {
         heightEdit = view.findViewById(R.id.profile_edit_height);
         genderEdit = view.findViewById(R.id.profile_edit_gender);
         dateOfBirthEdit = view.findViewById(R.id.profile_edit_birth);
+
+        username.setText(new StorageManager(getContext()).getCurrentUser().getUsername());
 
         fullNameEdit.setOnClickListener(fullNameEditListener);
         weightEdit.setOnClickListener(weightEditListener);
