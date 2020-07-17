@@ -93,7 +93,6 @@ public class SignInActivity extends Activity {
         loadStoredUser();
     }
 
-    // Considerare che la password non è salvata
     public void loadStoredUser() {
         User user = spManager.getCurrentUser();
         if (user != null) {
@@ -141,7 +140,7 @@ public class SignInActivity extends Activity {
         loginDialog.show();
 
         String url = getResources().getString(R.string.url_server) + "/refresh-token";
-        int pref = spManager.getAppPreference() == "FIT" ? 0 : 1;
+        int pref = spManager.getAppPreference().equals("FIT") ? 0 : 1;
 
         NetworkManager.refreshToken(this, url, new NetworkCallback() {
             @Override
