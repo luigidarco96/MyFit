@@ -18,8 +18,7 @@
             android:id="@+id/family_user_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_user_tie" />
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/family_user_username"

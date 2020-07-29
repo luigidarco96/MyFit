@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.luigidarco.myfit.R;
@@ -38,6 +39,10 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = dataset.get(position);
+        if (user.getGender() == 0)
+            holder.userImage.setImageResource(R.drawable.ic_male);
+        else
+            holder.userImage.setImageResource(R.drawable.ic_female);
         holder.username.setText(user.getUsername());
         holder.itemView.setOnClickListener(itemClick -> {
             callback.onClickItem(user);
@@ -51,10 +56,13 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView userImage;
         TextView username;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            userImage = itemView.findViewById(R.id.family_user_image);
             username = itemView.findViewById(R.id.family_user_username);
         }
     }

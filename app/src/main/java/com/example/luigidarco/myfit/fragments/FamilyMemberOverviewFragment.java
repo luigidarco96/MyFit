@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import com.example.luigidarco.myfit.R;
 import com.example.luigidarco.myfit.callbacks.NetworkCallback;
+import com.example.luigidarco.myfit.managers.GraphManager;
 import com.example.luigidarco.myfit.managers.NetworkManager;
+import com.github.mikephil.charting.data.Entry;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -31,12 +34,10 @@ public class FamilyMemberOverviewFragment extends Fragment {
     private String memberId;
     private String memberUsername;
 
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy, HH:mm:ss");
-
-    FitnessCard stepCard;
-    FitnessCard meterCard;
-    FitnessCard calorieCard;
-    FitnessCard heartRateCard;
+    private GraphManager stepGraphManager;
+    private GraphManager distanceGraphManager;
+    private GraphManager calorieGraphManager;
+    private GraphManager heartRatesGraphManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,26 +53,10 @@ public class FamilyMemberOverviewFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_family_member_overview, container, false);
 
-        stepCard = new FitnessCard(
-                "steps",
-                view.findViewById(R.id.family_member_steps),
-                new LineGraphSeries<>()
-        );
-        meterCard = new FitnessCard(
-                "meters",
-                view.findViewById(R.id.family_member_meters),
-                new LineGraphSeries<>()
-        );
-        calorieCard = new FitnessCard(
-                "calories",
-                view.findViewById(R.id.family_member_calories),
-                new LineGraphSeries<>()
-        );
-        heartRateCard = new FitnessCard(
-                "heart-rates",
-                view.findViewById(R.id.family_member_rates),
-                new LineGraphSeries<>()
-        );
+        stepGraphManager = new GraphManager(getContext(), view, R.id.family_member_steps);
+        distanceGraphManager = new GraphManager(getContext(), view, R.id.family_member_meters);
+        calorieGraphManager = new GraphManager(getContext(), view, R.id.family_member_calories);
+        heartRatesGraphManager = new GraphManager(getContext(), view, R.id.family_member_rates);
 
         return view;
     }
@@ -83,53 +68,34 @@ public class FamilyMemberOverviewFragment extends Fragment {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(memberUsername + " overview");
 
-        getFitnessData(stepCard);
-        getFitnessData(meterCard);
-        getFitnessData(calorieCard);
-        getFitnessData(heartRateCard);
+        loadData(stepGraphManager, "/steps/user/" + memberId);
+        loadData(calorieGraphManager, "/calories/user/" + memberId);
+        loadData(distanceGraphManager, "/meters/user/" + memberId);
+        loadData(heartRatesGraphManager, "/heart-rates/user/" + memberId);
     }
 
-    private DefaultLabelFormatter defaultLabelFormatter = new DefaultLabelFormatter() {
+    private void loadData(GraphManager graphManager, String table) {
+        ArrayList<Entry> values = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-
-        @Override
-        public String formatLabel(double value, boolean isValueX) {
-            if (isValueX) {
-                return sdf.format(new Date((long) value));
-            } else {
-                return super.formatLabel(value, isValueX);
-            }
-        }
-    };
-
-    private void getFitnessData(FitnessCard fitnessCard) {
-        String label = fitnessCard.label;
-        GraphView graphView = fitnessCard.graphView;
-        graphView.getGridLabelRenderer().setLabelFormatter(defaultLabelFormatter);
-        graphView.getGridLabelRenderer().setNumHorizontalLabels(5);
-        LineGraphSeries lineGraphSeries = fitnessCard.lineGraphSeries;
-
-        graphView.removeAllSeries();
-
-        String url = getResources().getString(R.string.url_server) + "/" + label + "/user/" + memberId;
+        String url = getResources().getString(R.string.url_server) + table;
 
         NetworkManager.makeGetJsonObjRequest(getContext(), url, new NetworkCallback() {
             @Override
             public void onSuccess(JSONObject object) {
                 try {
-                    JSONArray array = object.getJSONArray("data");
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject element = array.getJSONObject(i);
-                        Date date = dateFormatter.parse(element.getString("timestamp"));
-                        DataPoint dataPoint = new DataPoint(
-                                date.getTime(),
-                                element.getInt("value")
-                        );
-                        lineGraphSeries.appendData(dataPoint, true, 20);
+                    JSONArray data = object.getJSONArray("data");
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject obj = data.getJSONObject(i);
+                        values.add(new Entry(
+                                i,
+                                obj.getInt("value")
+                        ));
+                        labels.add(obj.getString("timestamp"));
                     }
-                    graphView.addSeries(lineGraphSeries);
-                } catch (JSONException | ParseException e) {
+                    graphManager.setData(values, labels);
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -139,18 +105,5 @@ public class FamilyMemberOverviewFragment extends Fragment {
 
             }
         });
-    }
-
-    private class FitnessCard {
-
-        public String label;
-        public GraphView graphView;
-        public LineGraphSeries<DataPoint> lineGraphSeries;
-
-        private FitnessCard(String label, GraphView graphView, LineGraphSeries<DataPoint> lineGraphSeries) {
-            this.label = label;
-            this.graphView = graphView;
-            this.lineGraphSeries = lineGraphSeries;
-        }
     }
 }

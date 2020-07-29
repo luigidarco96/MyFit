@@ -11,7 +11,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_margin="@dimen/layout_padding"
             app:cardCornerRadius="@dimen/layout_padding"
             app:cardElevation="5dp">
@@ -30,7 +30,7 @@
                     android:textColor="@color/colorTertiary"
                     android:textSize="20dp" />
 
-                <com.jjoe64.graphview.GraphView
+                <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/family_member_steps"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -41,7 +41,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_marginLeft="@dimen/layout_padding"
             android:layout_marginRight="@dimen/layout_padding"
             android:layout_marginBottom="@dimen/layout_padding"
@@ -62,7 +62,7 @@
                     android:textColor="@color/colorTertiary"
                     android:textSize="20dp" />
 
-                <com.jjoe64.graphview.GraphView
+                <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/family_member_meters"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -73,7 +73,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_marginLeft="@dimen/layout_padding"
             android:layout_marginRight="@dimen/layout_padding"
             android:layout_marginBottom="@dimen/layout_padding"
@@ -94,7 +94,7 @@
                     android:textColor="@color/colorTertiary"
                     android:textSize="20dp" />
 
-                <com.jjoe64.graphview.GraphView
+                <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/family_member_calories"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -105,7 +105,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="300dp"
             android:layout_marginLeft="@dimen/layout_padding"
             android:layout_marginRight="@dimen/layout_padding"
             android:layout_marginBottom="@dimen/layout_padding"
@@ -126,7 +126,7 @@
                     android:textColor="@color/colorTertiary"
                     android:textSize="20dp" />
 
-                <com.jjoe64.graphview.GraphView
+                <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/family_member_rates"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
