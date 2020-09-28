@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.addisonelliott.segmentedbutton.SegmentedButtonGroup;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -49,8 +48,6 @@ public class SignInActivity extends Activity {
     private LinearLayout errorLayout;
     private TextView errorText;
 
-    private SegmentedButtonGroup segmentedButtonGroup;
-
     StorageManager spManager;
 
     @Override
@@ -65,7 +62,6 @@ public class SignInActivity extends Activity {
         loginButton = findViewById(R.id.login_button);
         errorLayout = findViewById(R.id.sign_in_error_layout);
         errorText = findViewById(R.id.sign_in_error_text);
-        segmentedButtonGroup = findViewById(R.id.sign_in_app_preference);
 
         loginDialog = new ProgressDialog(this);
         loginDialog.setMessage("Sign in...");
@@ -78,9 +74,8 @@ public class SignInActivity extends Activity {
             if (username.equals("") || password.equals("")) {
                 return;
             }
-            int pref = segmentedButtonGroup.getPosition();
 
-            login(username, password, pref);
+            login(username, password);
 
         });
 
@@ -100,7 +95,7 @@ public class SignInActivity extends Activity {
         }
     }
 
-    private void login(String username, String password, int pref) {
+    private void login(String username, String password) {
         hideError();
         loginDialog.show();
 
@@ -116,7 +111,7 @@ public class SignInActivity extends Activity {
                 public void onSuccess(JSONObject object) {
                     try {
                         JSONObject data = object.getJSONObject("data");
-                        saveUser(data, pref);
+                        saveUser(data);
                         checkNewUser();
 
                     } catch (JSONException e) {
@@ -140,7 +135,6 @@ public class SignInActivity extends Activity {
         loginDialog.show();
 
         String url = getResources().getString(R.string.url_server) + "/refresh-token";
-        int pref = spManager.getAppPreference().equals("FIT") ? 0 : 1;
 
         NetworkManager.refreshToken(this, url, new NetworkCallback() {
             @Override
@@ -148,7 +142,7 @@ public class SignInActivity extends Activity {
                 JSONObject data = null;
                 try {
                     data = object.getJSONObject("data");
-                    saveUser(data, pref);
+                    saveUser(data);
                     checkNewUser();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -163,11 +157,10 @@ public class SignInActivity extends Activity {
         });
     }
 
-    private void saveUser(JSONObject obj, int pref) throws JSONException {
+    private void saveUser(JSONObject obj) throws JSONException {
         spManager.setUsername(username.getEditText().getText().toString());
         spManager.setAccessToken(obj.getString("access_token"));
         spManager.setRefreshToken(obj.getString("refresh_token"));
-        spManager.setAppPreference(pref == 0 ? StorageManager.AppPreference.FIT : StorageManager.AppPreference.ROBOT);
 
         User currentUser = new User(
                 obj.getInt("id"),
@@ -209,12 +202,8 @@ public class SignInActivity extends Activity {
 
     private void startSession() {
         Intent intent;
-        String appPreference = spManager.getAppPreference();
-        if (appPreference.equals("FIT")) {
-            intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-        } else {
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-        }
+
+        intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

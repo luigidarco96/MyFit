@@ -1,6 +1,7 @@
 package com.example.luigidarco.myfit.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,14 @@ import com.example.luigidarco.myfit.callbacks.NetworkCallback;
 import com.example.luigidarco.myfit.managers.GraphManager;
 import com.example.luigidarco.myfit.managers.NetworkManager;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +26,9 @@ import androidx.fragment.app.Fragment;
 
 public class BmiStatisticsFragment extends Fragment {
 
+    private String TAG = "MYFITAPP";
+
     private GraphManager graphManager;
-    private ArrayList<Entry> values;
 
     @Nullable
     @Override
@@ -54,10 +58,10 @@ public class BmiStatisticsFragment extends Fragment {
             public void onSuccess(JSONObject object) {
                 try {
                     JSONArray data = object.getJSONArray("data");
-                    for (int i = 0; i < data.length(); i++) {
+                    for (int i = data.length() - 1; i >= 0; i--) {
                         JSONObject obj = data.getJSONObject(i);
                         values.add(new Entry(
-                                i,
+                                data.length() - 1 - i,
                                 (float) obj.getDouble("bmi")
                         ));
                         labels.add(obj.getString("timestamp"));

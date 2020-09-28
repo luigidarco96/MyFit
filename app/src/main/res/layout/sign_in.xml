@@ -90,34 +90,6 @@
             android:text="Sign In"
             android:textColor="#fff" />
 
-        <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
-            android:id="@+id/sign_in_app_preference"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/layout_padding"
-            android:elevation="1dp"
-            app:position="0"
-            app:selectedBackground="@color/colorPrimary">
-
-            <com.addisonelliott.segmentedbutton.SegmentedButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/layout_padding"
-                app:selectedTextColor="@color/colorSecondary"
-                app:text="fit version" />
-
-            <com.addisonelliott.segmentedbutton.SegmentedButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/layout_padding"
-                app:selectedTextColor="@color/colorSecondary"
-                app:text="robot version" />
-
-        </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
-
     </LinearLayout>
 
     <TextView

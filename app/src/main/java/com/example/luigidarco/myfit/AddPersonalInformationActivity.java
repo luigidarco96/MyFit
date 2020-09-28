@@ -25,7 +25,6 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
     private String TAG = "MYFITAPP";
 
     private StorageManager spManager;
-    private String appPreference;
 
     private TextInputLayout weight;
     private TextInputLayout height;
@@ -39,7 +38,6 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
         setContentView(R.layout.add_profile_information);
 
         spManager = new StorageManager(this);
-        appPreference = spManager.getAppPreference();
 
         weight = findViewById(R.id.user_weight);
         height = findViewById(R.id.user_height);
@@ -107,11 +105,7 @@ public class AddPersonalInformationActivity extends AppCompatActivity {
 
     private void startSession() {
         Intent intent;
-        if (appPreference.equals("FIT")) {
-            intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
-        } else {
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-        }
+        intent = new Intent(getApplicationContext(), BluetoothDeviceListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
